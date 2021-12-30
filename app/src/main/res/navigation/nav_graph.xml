@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/newpatients"
-        android:name="com.bassem.clinicdoctorapp.patients.Newpatients"
+        android:name="com.bassem.clinicdoctorapp.patients.newpatients.Newpatients"
         android:label="newpatient_fragment"
         tools:layout="@layout/newpatient_fragment" >
         <action
