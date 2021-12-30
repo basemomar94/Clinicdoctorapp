@@ -1,4 +1,4 @@
-package com.bassem.clinicdoctorapp.patients
+package com.bassem.clinicdoctorapp.patients.listofpatients
 
 import android.os.Bundle
 import android.view.LayoutInflater

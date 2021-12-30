@@ -12,7 +12,7 @@
         tools:layout="@layout/home_fragment" />
     <fragment
         android:id="@+id/patients"
-        android:name="com.bassem.clinicdoctorapp.patients.Patients"
+        android:name="com.bassem.clinicdoctorapp.patients.listofpatients.Patients"
         android:label="patients_fragment"
         tools:layout="@layout/patients_fragment" >
         <action

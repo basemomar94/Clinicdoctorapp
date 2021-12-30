@@ -42,7 +42,12 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         db = Firebase.firestore
         var viewmodel = ViewModelProvider(this).get(NewpatiensViewmodel::class.java)
         addnow.setOnClickListener {
-            senddata()
+            try {
+                senddata()
+
+            } catch (E:Exception){
+
+            }
         }
     }
 

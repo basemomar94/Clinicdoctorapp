@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".patients.Patients">
+    tools:context=".patients.listofpatients.Patients">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
