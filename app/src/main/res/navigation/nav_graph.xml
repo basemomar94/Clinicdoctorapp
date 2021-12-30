@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.bassem.clinicdoctorapp.home.Home"
+        android:label="home_fragment"
+        tools:layout="@layout/home_fragment" />
+    <fragment
+        android:id="@+id/patients"
+        android:name="com.bassem.clinicdoctorapp.patients.Patients"
+        android:label="patients_fragment"
+        tools:layout="@layout/patients_fragment" >
+        <action
+            android:id="@+id/action_patients_to_newpatients"
+            app:destination="@id/newpatients" />
+    </fragment>
+    <fragment
+        android:id="@+id/newpatients"
+        android:name="com.bassem.clinicdoctorapp.patients.Newpatients"
+        android:label="newpatient_fragment"
+        tools:layout="@layout/newpatient_fragment" >
+        <action
+            android:id="@+id/action_newpatients_to_patients"
+            app:destination="@id/patients" />
+    </fragment>
+</navigation>
