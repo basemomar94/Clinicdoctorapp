@@ -42,16 +42,21 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         db = Firebase.firestore
         var viewmodel = ViewModelProvider(this).get(NewpatiensViewmodel::class.java)
         addnow.setOnClickListener {
+            binding?.addnow?.text=""
+            binding?.loading?.visibility=View.VISIBLE
             try {
                 senddata()
 
             } catch (E:Exception){
+                binding?.addnow?.text="ADD"
+                binding?.loading?.visibility=View.INVISIBLE
 
             }
         }
     }
 
     fun senddata() {
+
         val name = binding?.nameadd?.text.toString()
         val age = binding?.age?.text.toString().toInt()
         val complain = binding?.complainadd?.text.toString()
@@ -81,6 +86,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 findNavController().navigate(R.id.action_newpatients_to_patients)
 
             }!!.addOnFailureListener {
+                binding?.addnow?.text="ADD"
+                binding?.loading?.visibility=View.INVISIBLE
 
             }
 
