@@ -19,7 +19,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     lateinit var db: FirebaseFirestore
     private var _binding: PatientinfoFragmentBinding? = null
     val binding get() = _binding
-    var mobile: Int? = null
+    var mobile: String? = null
     private var fullname: String? = null
     private var handler: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,16 +67,16 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
                 binding!!.jobInfo.text = value?.getString("job")
                 binding!!.complainInfo.text = value?.getString("complain")
                 binding!!.mailInfo.text = value?.getString("mail")
-                mobile = 0 + value?.getDouble("phone")?.toInt()!!
-                binding!!.phoneInfo.text = mobile.toString()
+                mobile = value?.getString("phone")
+                binding!!.phoneInfo.text = mobile
 
-                binding!!.notesInfo.text = value.getString("note")
-                val sex =value.getString("sex")
+                binding!!.notesInfo.text = value?.getString("note")
+                val sex = value?.getString("sex")
                 binding!!.sexInfo.text = sex
-                if (sex.equals("male")){
-                    handler="Mr"
+                handler = if (sex.equals("male")){
+                    "Mr"
                 } else {
-                    handler="Miss"
+                    "Miss"
                 }
 
 
@@ -87,7 +87,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     fun Call() {
         binding?.call?.setOnClickListener {
             var intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:0$mobile")
+            intent.data = Uri.parse("tel:$mobile")
             startActivity(intent)
 
         }
@@ -95,7 +95,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
     fun Whatsapp() {
 
-        val text = "Hell $handler $fullname It's Dr bassem Clinic"
+        val text = "Hello $handler $fullname It's Dr bassem Clinic"
         val uri = Uri.parse("https://api.whatsapp.com/send?phone=+20$mobile&text=$text")
 
         val intent = Intent(Intent.ACTION_VIEW, uri)

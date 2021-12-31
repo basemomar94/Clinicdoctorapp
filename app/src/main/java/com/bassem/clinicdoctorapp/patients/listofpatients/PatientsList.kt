@@ -9,6 +9,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bassem.clinicdoctorapp.MainActivity
 import com.bassem.clinicdoctorapp.R
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.patients_fragment.*
@@ -23,7 +24,15 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val actionBar = (activity as MainActivity).supportActionBar
+        actionBar?.title = "Patients list"
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val actionBar = (activity as MainActivity).supportActionBar
+        actionBar?.title = "Patients list"
     }
 
     override fun onCreateView(
@@ -72,7 +81,6 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
                             myAdapter.notifyDataSetChanged()
 
                         }
-
 
 
                     }).start()
