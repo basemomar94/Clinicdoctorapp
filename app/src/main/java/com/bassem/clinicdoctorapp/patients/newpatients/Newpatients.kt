@@ -1,9 +1,11 @@
 package com.bassem.clinicdoctorapp.patients.newpatients
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -11,6 +13,7 @@ import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.NewpatientFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -20,8 +23,8 @@ import java.util.*
 
 class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
-    var _binding: NewpatientFragmentBinding? = null
-    val binding get() = _binding
+    private var _binding: NewpatientFragmentBinding? = null
+    private val binding get() = _binding
     var db: FirebaseFirestore? = null
     var userid: String? = null
     private lateinit var auth: FirebaseAuth;
@@ -48,8 +51,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         addnow.setOnClickListener {
             binding?.addnow?.text = ""
             binding?.loading?.visibility = View.VISIBLE
-            binding?.addnow?.alpha=.5F
-            binding?.addnow?.isClickable=false
+            binding?.addnow?.alpha = .5F
+            binding?.addnow?.isClickable = false
 
             try {
                 Signup()
@@ -57,25 +60,34 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 println(E.message)
                 binding?.addnow?.text = "ADD"
                 binding?.loading?.visibility = View.INVISIBLE
-                binding?.addnow?.alpha=1F
-                binding?.addnow?.isClickable=true
-
+                binding?.addnow?.alpha = 1F
+                binding?.addnow?.isClickable = true
 
 
             }
         }
     }
 
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
+
     fun senddata() {
 
-        val name = binding?.nameadd?.text.toString()
+        val name = binding?.fullname?.text.toString()
         val age = binding?.age?.text.toString().toInt()
-        val complain = binding?.complainadd?.text.toString()
+        val complain = binding?.complain?.text.toString()
         val note = binding?.notes?.text.toString()
         val phone = binding?.phone?.text.toString().toInt()
         val mail = binding?.mail?.text.toString()
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        val currentDate = sdf.format(Date())
+        val job = binding?.job?.text.toString()
+        var sex : String?=null
+        var id : Int = binding?.sexadd!!.checkedRadioButtonId
+        if (id!=-1){
+            val radio:RadioButton=activity!!.findViewById(id)
+            sex= radio.text.toString()
+        }
         if (name.isNotEmpty() && complain.isNotEmpty() && complain.isNotEmpty() && note.isNotEmpty()
             && phone.toString().isNotEmpty() && age.toString().isNotEmpty() && mail.isNotEmpty()
 
@@ -87,7 +99,10 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 "note" to note,
                 "phone" to phone,
                 "mail" to mail,
-                "first_visit" to currentDate
+                "first_visit" to FieldValue.serverTimestamp(),
+                "id" to userid,
+                "job" to job,
+                "sex" to sex
 
             )
 
@@ -99,8 +114,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
             }!!.addOnFailureListener {
                 binding?.addnow?.text = "ADD"
                 binding?.loading?.visibility = View.INVISIBLE
-                binding?.addnow?.alpha=1F
-                binding?.addnow?.isClickable=true
+                binding?.addnow?.alpha = 1F
+                binding?.addnow?.isClickable = true
 
 
             }
@@ -117,7 +132,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
         auth = Firebase.auth
         auth.createUserWithEmailAndPassword(mail, phone.toString()).addOnSuccessListener {
-           println("${it.user?.uid}=========================it====")
+            println("${it.user?.uid}=========================it====")
 
             userid = auth.uid
             println("$userid =================auth")
@@ -128,8 +143,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
             println(it.message)
             binding?.addnow?.text = "ADD"
             binding?.loading?.visibility = View.INVISIBLE
-            binding?.addnow?.alpha=1F
-            binding?.addnow?.isClickable=true
+            binding?.addnow?.alpha = 1F
+            binding?.addnow?.isClickable = true
         }
 
     }

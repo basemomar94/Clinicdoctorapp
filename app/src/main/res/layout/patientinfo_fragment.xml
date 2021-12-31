@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".patients.newpatients.Newpatients">
+    tools:context=".patients.info.PatientsInfo"
+
+    >
 
 
 
@@ -23,14 +25,13 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/id" />
 
-        <EditText
-            android:id="@+id/fullname"
+        <TextView
+            android:id="@+id/fullname_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="full name"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:padding="8dp" />
@@ -48,27 +49,17 @@
             android:layout_margin="8dp"
             android:src="@drawable/sex" />
 
-        <RadioGroup
-            android:id="@+id/sexadd"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/sex_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:padding="8dp" />
 
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:minHeight="48dp"
-                android:text="male" />
-
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="female" />
-        </RadioGroup>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,14 +74,13 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/age" />
 
-        <EditText
-            android:id="@+id/age"
+        <TextView
+            android:id="@+id/age_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="age"
             android:inputType="number"
             android:minHeight="48dp"
             android:padding="8dp" />
@@ -109,14 +99,13 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/smartphone" />
 
-        <EditText
-            android:id="@+id/phone"
+        <TextView
+            android:id="@+id/phone_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="phone number"
             android:inputType="number"
             android:minHeight="48dp"
             android:padding="8dp" />
@@ -135,14 +124,13 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/job" />
 
-        <EditText
-            android:id="@+id/job"
+        <TextView
+            android:id="@+id/job_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="job"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:padding="8dp" />
@@ -162,14 +150,13 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/gmail" />
 
-        <EditText
-            android:id="@+id/mail"
+        <TextView
+            android:id="@+id/mail_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="mail"
             android:inputType="textEmailAddress"
             android:minHeight="48dp"
             android:padding="8dp" />
@@ -190,14 +177,13 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/ill" />
 
-        <EditText
-            android:id="@+id/complain"
+        <TextView
+            android:id="@+id/complain_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="main complain"
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:padding="8dp" />
@@ -216,46 +202,42 @@
             android:layout_margin="8dp"
             app:srcCompat="@drawable/notepad" />
 
-        <EditText
-            android:id="@+id/notes"
+        <TextView
+            android:id="@+id/notes_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="notes"
             android:inputType="textMultiLine"
             android:minHeight="48dp"
             android:padding="8dp" />
 
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/addnow"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_margin="8dp"
-                android:background="@drawable/custom_but"
-                android:text="add" />
-        </FrameLayout>
-
-        <ProgressBar
-            android:id="@+id/loading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/call"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="invisible" />
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_but"
+            android:text="Call" />
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/whatsapp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_but"
+            android:text="Whatsapp" />
+    </LinearLayout>
 
 </LinearLayout>

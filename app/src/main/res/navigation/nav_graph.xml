@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_patients_to_newpatients"
             app:destination="@id/newpatients" />
+        <action
+            android:id="@+id/action_patients_to_patientsInfo"
+            app:destination="@id/patientsInfo" />
     </fragment>
     <fragment
         android:id="@+id/newpatients"
@@ -28,4 +31,9 @@
             android:id="@+id/action_newpatients_to_patients"
             app:destination="@id/patients" />
     </fragment>
+    <fragment
+        android:id="@+id/patientsInfo"
+        android:name="com.bassem.clinicdoctorapp.patients.info.PatientsInfo"
+        android:label="patientinfo_fragment"
+        tools:layout="@layout/patientinfo_fragment" />
 </navigation>

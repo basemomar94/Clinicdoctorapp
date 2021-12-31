@@ -7,7 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.R
 
-class patientsadapter(val patientsList: ArrayList<Patientsclass>) :
+class patientsadapter(
+    val patientsList: ArrayList<Patientsclass>,
+    val listner: Myclicklisener,
+) :
     RecyclerView.Adapter<patientsadapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): patientsadapter.ViewHolder {
         val v =
@@ -25,11 +28,28 @@ class patientsadapter(val patientsList: ArrayList<Patientsclass>) :
         return patientsList.size
     }
 
-    class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
+   inner class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
         val fullname: TextView = itemview.findViewById(R.id.name_list)
         val complain: TextView = itemview.findViewById(R.id.complain_list)
 
+        init {
+
+            itemview.setOnClickListener {
+                val position: Int = absoluteAdapterPosition
+                listner.onClick(position)
+                println(position)
+
+
+            }
+        }
+
+
+    }
+
+    interface Myclicklisener {
+        fun onClick(position: Int)
 
     }
 }
+
