@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.NewpatientFragmentBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,6 +23,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
     var _binding: NewpatientFragmentBinding? = null
     val binding get() = _binding
     var db: FirebaseFirestore? = null
+    var userid: String? = null
+    private lateinit var auth: FirebaseAuth;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,14 +46,21 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         db = Firebase.firestore
         var viewmodel = ViewModelProvider(this).get(NewpatiensViewmodel::class.java)
         addnow.setOnClickListener {
-            binding?.addnow?.text=""
-            binding?.loading?.visibility=View.VISIBLE
-            try {
-                senddata()
+            binding?.addnow?.text = ""
+            binding?.loading?.visibility = View.VISIBLE
+            binding?.addnow?.alpha=.5F
+            binding?.addnow?.isClickable=false
 
-            } catch (E:Exception){
-                binding?.addnow?.text="ADD"
-                binding?.loading?.visibility=View.INVISIBLE
+            try {
+                Signup()
+            } catch (E: Exception) {
+                println(E.message)
+                binding?.addnow?.text = "ADD"
+                binding?.loading?.visibility = View.INVISIBLE
+                binding?.addnow?.alpha=1F
+                binding?.addnow?.isClickable=true
+
+
 
             }
         }
@@ -70,7 +81,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
         ) {
             val user = hashMapOf(
-                "name" to name,
+                "fullname" to name,
                 "age" to age,
                 "complain" to complain,
                 "note" to note,
@@ -80,20 +91,46 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
             )
 
-            db?.collection("patiens_info")?.add(user)?.addOnSuccessListener {
+            db?.collection("patiens_info")?.document(userid!!)?.set(user)?.addOnSuccessListener {
 
 
                 findNavController().navigate(R.id.action_newpatients_to_patients)
 
             }!!.addOnFailureListener {
-                binding?.addnow?.text="ADD"
-                binding?.loading?.visibility=View.INVISIBLE
+                binding?.addnow?.text = "ADD"
+                binding?.loading?.visibility = View.INVISIBLE
+                binding?.addnow?.alpha=1F
+                binding?.addnow?.isClickable=true
+
 
             }
 
 
         }
 
+
+    }
+
+    fun Signup() {
+        val mail = binding?.mail?.text.toString()
+        val phone = binding?.phone?.text.toString().toInt()
+
+        auth = Firebase.auth
+        auth.createUserWithEmailAndPassword(mail, phone.toString()).addOnSuccessListener {
+           println("${it.user?.uid}=========================it====")
+
+            userid = auth.uid
+            println("$userid =================auth")
+            senddata()
+
+
+        }.addOnFailureListener {
+            println(it.message)
+            binding?.addnow?.text = "ADD"
+            binding?.loading?.visibility = View.INVISIBLE
+            binding?.addnow?.alpha=1F
+            binding?.addnow?.isClickable=true
+        }
 
     }
 }

@@ -6,11 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".patients.listofpatients.Patients">
+    tools:context=".patients.listofpatients.PatientsList">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/patientsRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
