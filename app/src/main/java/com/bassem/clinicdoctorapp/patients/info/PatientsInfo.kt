@@ -3,11 +3,12 @@ package com.bassem.clinicdoctorapp.patients.info
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.telephony.PhoneNumberUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PatientinfoFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,6 +50,9 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         Call()
         binding?.whatsapp?.setOnClickListener {
             Whatsapp()
+        }
+        binding?.prescription?.setOnClickListener {
+            GotoPrescription()
         }
 
     }
@@ -104,6 +108,13 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
 
     }
+    fun GotoPrescription (){
+        val bundle=Bundle()
+        bundle.putString("id",id)
+        val navController=Navigation.findNavController(activity!!,R.id.nav_host_fragment)
+        navController.navigate(R.id.action_patientsInfo_to_prescription,bundle)
+    }
+
 
 
 }

@@ -35,5 +35,18 @@
         android:id="@+id/patientsInfo"
         android:name="com.bassem.clinicdoctorapp.patients.info.PatientsInfo"
         android:label="patientinfo_fragment"
-        tools:layout="@layout/patientinfo_fragment" />
+        tools:layout="@layout/patientinfo_fragment" >
+        <action
+            android:id="@+id/action_patientsInfo_to_prescription"
+            app:destination="@id/prescription2" />
+    </fragment>
+    <fragment
+        android:id="@+id/prescription2"
+        android:name="com.bassem.clinicdoctorapp.patients.prescription.Prescription"
+        android:label="prescription_fragment"
+        tools:layout="@layout/prescription_fragment" >
+        <action
+            android:id="@+id/action_prescription2_to_home"
+            app:destination="@id/home" />
+    </fragment>
 </navigation>
