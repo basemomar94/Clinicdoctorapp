@@ -57,12 +57,11 @@
                         android:id="@+id/medecine"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
+                        android:layout_margin="8dp"
                         android:layout_weight="1"
                         android:ems="10"
-                        android:hint="medicine"
-                        android:inputType="textPersonName|textImeMultiLine" />
-
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine" />
                 </LinearLayout>
 
                 <EditText

@@ -39,6 +39,9 @@
         <action
             android:id="@+id/action_patientsInfo_to_prescription"
             app:destination="@id/prescription2" />
+        <action
+            android:id="@+id/action_patientsInfo_to_calendar"
+            app:destination="@id/calendar" />
     </fragment>
     <fragment
         android:id="@+id/prescription2"
@@ -46,7 +49,16 @@
         android:label="prescription_fragment"
         tools:layout="@layout/prescription_fragment" >
         <action
-            android:id="@+id/action_prescription2_to_home"
-            app:destination="@id/home" />
+            android:id="@+id/action_prescription2_to_patientsInfo"
+            app:destination="@id/patientsInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/calendar"
+        android:name="com.bassem.clinicdoctorapp.patients.info.Calendar"
+        android:label="calendarbooking_fragment"
+        tools:layout="@layout/calendarbooking_fragment" >
+        <action
+            android:id="@+id/action_calendar_to_patientsInfo2"
+            app:destination="@id/patientsInfo" />
     </fragment>
 </navigation>

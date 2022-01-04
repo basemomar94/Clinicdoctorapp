@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PrescriptionFragmentBinding
@@ -89,7 +90,7 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
 
             if (it.isSuccessful){
                 Toast.makeText(context,"Prescription has been sent to ${binding.namePrescription.text}",Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_prescription2_to_home)
+               Backtoinfo()
             }
 
         }.addOnFailureListener {
@@ -112,6 +113,12 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
             }
         }
 
+    }
+    fun Backtoinfo(){
+        val bundle = Bundle()
+        bundle.putString("id", id)
+        val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        navController.navigate(R.id.action_prescription2_to_patientsInfo,bundle)
     }
 
 }

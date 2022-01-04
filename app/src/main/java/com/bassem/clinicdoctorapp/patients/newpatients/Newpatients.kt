@@ -141,6 +141,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 binding?.addnow?.isClickable = true
 
 
+
             }
 
 

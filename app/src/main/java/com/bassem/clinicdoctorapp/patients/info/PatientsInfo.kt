@@ -54,6 +54,9 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         binding?.prescription?.setOnClickListener {
             GotoPrescription()
         }
+        binding?.bookBu?.setOnClickListener {
+            GotoBooking()
+        }
 
     }
 
@@ -77,7 +80,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
                 binding!!.notesInfo.text = value?.getString("note")
                 val sex = value?.getString("sex")
                 binding!!.sexInfo.text = sex
-                handler = if (sex.equals("male")){
+                handler = if (sex.equals("male")) {
                     "Mr"
                 } else {
                     "Miss"
@@ -108,13 +111,21 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
 
     }
-    fun GotoPrescription (){
-        val bundle=Bundle()
-        bundle.putString("id",id)
-        val navController=Navigation.findNavController(activity!!,R.id.nav_host_fragment)
-        navController.navigate(R.id.action_patientsInfo_to_prescription,bundle)
+
+    fun GotoPrescription() {
+        val bundle = Bundle()
+        bundle.putString("id", id)
+        val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        navController.navigate(R.id.action_patientsInfo_to_prescription, bundle)
     }
 
+    fun GotoBooking() {
+        val bundle = Bundle()
+        bundle.putString("id", id)
+        val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        navController.navigate(R.id.action_patientsInfo_to_calendar,bundle)
+
+    }
 
 
 }
