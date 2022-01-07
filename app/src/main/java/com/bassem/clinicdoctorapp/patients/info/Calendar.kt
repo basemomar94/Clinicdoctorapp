@@ -27,7 +27,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var id: String? = null
     var visit: String? = null
     var sucess: Boolean = false
-    var BookB:Boolean=false
+    var BookB: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,14 +59,13 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
         }
         binding?.confirm?.setOnClickListener {
-            BookB=true
+            BookB = true
             binding?.confirm?.text = ""
             binding?.loading?.visibility = View.VISIBLE
             binding?.confirm?.alpha = .5F
             binding?.confirm?.isClickable = false
             try {
                 Book()
-
 
 
             } catch (E: Exception) {
@@ -83,38 +82,28 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
     fun Book() {
         println(BookB)
-        if (BookB){
+        if (BookB) {
             db = FirebaseFirestore.getInstance()
-            db?.collection("patiens_info")?.document(id!!)?.addSnapshotListener { value, error ->
-                if (error != null) {
-                    println(error.message)
-                } else {
-                    var note: String = binding?.note?.text.toString()
-                    mobile = value?.getString("phone")
-                    var data = HashMap<String, Any>()
-                    data.put("date", date!!)
-                    data.put("note", note)
-                    data.put("bookingtime", FieldValue.serverTimestamp())
-                    data.put("id", id!!)
-                    data.put("Booked_by","Clinic")
-                    data.put("status","Pending")
-                    db?.collection("visits")?.add(data)?.addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            visit = it.result?.id
-                            sucess = true
-                            BookB=false
+            var note: String = binding?.note?.text.toString()
+            var data = HashMap<String, Any>()
+            data.put("date", date!!)
+            data.put("note", note)
+            data.put("bookingtime", FieldValue.serverTimestamp())
+            data.put("id", id!!)
+            data.put("Booked_by", "Clinic")
+            data.put("status", "Pending")
 
-                        }
-
-                    }
-
-                }
-            }
-            Handler().postDelayed(Runnable {
-                if (sucess) {
+            db?.collection("visits")?.add(data)?.addOnCompleteListener {
+                if (it.isSuccessful && BookB) {
+                    visit = it.result?.id
+                    sucess = true
                     Addvisit()
+                    return@addOnCompleteListener
+
                 }
-            }, 500)
+
+            }
+
         }
 
 
@@ -134,11 +123,15 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         var updates = HashMap<String, Any>()
         updates.put("visit_id", visit!!)
         updates.put("IsVisit", true)
+        BookB = false
+
         db!!.collection("patiens_info").document(id!!)
             .update(updates)
             .addOnCompleteListener {
+
                 if (it.isSuccessful) {
                     println("Done")
+                    db!!.collection("visits").document(visit!!).update("visit",visit)
                     activity?.supportFragmentManager?.popBackStack()
 
                 }

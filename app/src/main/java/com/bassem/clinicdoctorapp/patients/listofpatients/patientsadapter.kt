@@ -45,6 +45,7 @@ class patientsadapter(
                 println(position)
 
 
+
             }
         }
 
