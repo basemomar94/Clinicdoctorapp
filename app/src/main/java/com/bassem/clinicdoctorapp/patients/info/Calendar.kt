@@ -27,6 +27,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var id: String? = null
     var visit: String? = null
     var sucess: Boolean = false
+    var BookB:Boolean=false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,12 +59,15 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
         }
         binding?.confirm?.setOnClickListener {
+            BookB=true
             binding?.confirm?.text = ""
             binding?.loading?.visibility = View.VISIBLE
             binding?.confirm?.alpha = .5F
             binding?.confirm?.isClickable = false
             try {
                 Book()
+
+
 
             } catch (E: Exception) {
                 println(E.message)
@@ -78,36 +82,41 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     }
 
     fun Book() {
-        println("Clicked")
+        println(BookB)
+        if (BookB){
+            db = FirebaseFirestore.getInstance()
+            db?.collection("patiens_info")?.document(id!!)?.addSnapshotListener { value, error ->
+                if (error != null) {
+                    println(error.message)
+                } else {
+                    var note: String = binding?.note?.text.toString()
+                    mobile = value?.getString("phone")
+                    var data = HashMap<String, Any>()
+                    data.put("date", date!!)
+                    data.put("note", note)
+                    data.put("bookingtime", FieldValue.serverTimestamp())
+                    data.put("id", id!!)
+                    data.put("Booked_by","Clinic")
+                    data.put("status","Pending")
+                    db?.collection("visits")?.add(data)?.addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            visit = it.result?.id
+                            sucess = true
+                            BookB=false
 
-        db = FirebaseFirestore.getInstance()
-        db?.collection("patiens_info")?.document(id!!)?.addSnapshotListener { value, error ->
-            if (error != null) {
-                println(error.message)
-            } else {
-                var note: String = binding?.note?.text.toString()
-                mobile = value?.getString("phone")
-                var data = HashMap<String, Any>()
-                data.put("date", date!!)
-                data.put("note", note)
-                data.put("bookingtime", FieldValue.serverTimestamp())
-                data.put("id", id!!)
-                db?.collection("visits")?.add(data)?.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        visit = it.result?.id
-                        sucess = true
+                        }
 
                     }
 
                 }
-
             }
+            Handler().postDelayed(Runnable {
+                if (sucess) {
+                    Addvisit()
+                }
+            }, 500)
         }
-        Handler().postDelayed(Runnable {
-            if (sucess) {
-                Addvisit()
-            }
-        }, 1000)
+
 
     }
 
@@ -130,7 +139,6 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     println("Done")
-
                     activity?.supportFragmentManager?.popBackStack()
 
                 }

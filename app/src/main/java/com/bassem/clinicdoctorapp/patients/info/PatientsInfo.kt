@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PatientinfoFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.patientinfo_fragment.*
 
 
 class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
@@ -24,6 +22,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     var mobile: String? = null
     private var fullname: String? = null
     private var handler: String? = null
+    var visit_id:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -94,6 +93,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
                     "Miss"
                 }
                 if (value?.getBoolean("IsVisit") == true) {
+                    visit_id=value.getString("visit_id")
                     binding?.next?.text = value.getString("next_visit")
                     binding?.bookBu?.visibility = View.GONE
                     binding?.cancel?.visibility = View.VISIBLE
@@ -151,18 +151,25 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     }
 
     fun Cancel() {
-        println("cancel")
         db = FirebaseFirestore.getInstance()
-        db?.collection("patiens_info").document(id).update("IsVisit", false)
-            ?.addOnCompleteListener {
+        db.collection("patiens_info").document(id).update("IsVisit", false)
+            .addOnCompleteListener {
 
                 if (it.isSuccessful) {
                     binding?.bookBu?.visibility = View.VISIBLE
                     binding?.cancel?.visibility = View.GONE
                     binding?.nextlinear?.visibility = View.GONE
+                    CancelOnVisit()
                 }
 
             }
+    }
+    fun CancelOnVisit (){
+        db= FirebaseFirestore.getInstance()
+        db.collection("visits").document(visit_id!!).update("status","cancelled by clinic").addOnCompleteListener {
+
+        }
+
     }
 
 

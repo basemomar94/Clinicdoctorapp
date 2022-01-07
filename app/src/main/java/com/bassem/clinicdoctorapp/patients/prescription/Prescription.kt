@@ -143,6 +143,7 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
     }
 
     fun Addtovisits() {
+        add.put("status","Done")
         db = FirebaseFirestore.getInstance()
         db.collection("visits").document(visit!!).update(add).addOnCompleteListener {
             if (it.isSuccessful) {

@@ -6,6 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.R
+import java.util.ArrayList
+
+
+
 
 class patientsadapter(
     val patientsList: ArrayList<Patientsclass>,
@@ -51,5 +55,7 @@ class patientsadapter(
         fun onClick(position: Int)
 
     }
+
+
 }
 
