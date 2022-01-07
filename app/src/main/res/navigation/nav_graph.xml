@@ -41,7 +41,9 @@
             app:destination="@id/prescription2" />
         <action
             android:id="@+id/action_patientsInfo_to_calendar"
-            app:destination="@id/calendar" />
+            app:destination="@id/calendar"
+
+            />
     </fragment>
     <fragment
         android:id="@+id/prescription2"

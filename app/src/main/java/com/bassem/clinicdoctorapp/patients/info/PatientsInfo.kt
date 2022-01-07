@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
@@ -47,7 +48,10 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
             GettingData()
 
         }
-        Call()
+        binding?.call?.setOnClickListener {
+            Call()
+
+        }
         binding?.whatsapp?.setOnClickListener {
             Whatsapp()
         }
@@ -57,10 +61,14 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         binding?.bookBu?.setOnClickListener {
             GotoBooking()
         }
+        binding?.cancel?.setOnClickListener {
+            Cancel()
+        }
 
     }
 
     fun GettingData() {
+        println("data")
         db = FirebaseFirestore.getInstance()
         db.collection("patiens_info").document(id).addSnapshotListener { value, error ->
 
@@ -85,19 +93,32 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
                 } else {
                     "Miss"
                 }
+                if (value?.getBoolean("IsVisit") == true) {
+                    binding?.next?.text = value.getString("next_visit")
+                    binding?.bookBu?.visibility = View.GONE
+                    binding?.cancel?.visibility = View.VISIBLE
+                    binding?.nextlinear?.visibility = View.VISIBLE
+                    binding?.prescription?.visibility=View.VISIBLE
+                } else {
+                    binding?.bookBu?.visibility = View.VISIBLE
+                    binding?.cancel?.visibility = View.GONE
+                    binding?.nextlinear?.visibility = View.GONE
+                    binding?.prescription?.visibility=View.GONE
+
+
+                }
 
 
             }
         }
     }
 
-    fun Call() {
-        binding?.call?.setOnClickListener {
-            var intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:$mobile")
-            startActivity(intent)
 
-        }
+    fun Call() {
+
+        var intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:$mobile")
+        startActivity(intent)
     }
 
     fun Whatsapp() {
@@ -123,8 +144,25 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         val bundle = Bundle()
         bundle.putString("id", id)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
-        navController.navigate(R.id.action_patientsInfo_to_calendar,bundle)
+        val navBuilder = NavOptions.Builder()
+        val navOptions: NavOptions = navBuilder.setLaunchSingleTop(true).build()
+        navController.navigate(R.id.action_patientsInfo_to_calendar, bundle,navOptions)
 
+    }
+
+    fun Cancel() {
+        println("cancel")
+        db = FirebaseFirestore.getInstance()
+        db?.collection("patiens_info").document(id).update("IsVisit", false)
+            ?.addOnCompleteListener {
+
+                if (it.isSuccessful) {
+                    binding?.bookBu?.visibility = View.VISIBLE
+                    binding?.cancel?.visibility = View.GONE
+                    binding?.nextlinear?.visibility = View.GONE
+                }
+
+            }
     }
 
 

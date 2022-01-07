@@ -2,12 +2,15 @@ package com.bassem.clinicdoctorapp.patients.info
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.CalendarbookingFragmentBinding
 import com.google.firebase.firestore.FieldValue
@@ -22,6 +25,9 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var newdb: FirebaseFirestore? = null
     var mobile: String? = null
     var id: String? = null
+    var visit: String? = null
+    var sucess: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +65,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
             try {
                 Book()
 
-            } catch (E:Exception){
+            } catch (E: Exception) {
                 println(E.message)
                 binding?.confirm!!.text = "Confirm"
                 binding?.loading!!.visibility = View.INVISIBLE
@@ -72,49 +78,64 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     }
 
     fun Book() {
+        println("Clicked")
 
         db = FirebaseFirestore.getInstance()
-        println(id)
         db?.collection("patiens_info")?.document(id!!)?.addSnapshotListener { value, error ->
             if (error != null) {
                 println(error.message)
             } else {
                 var note: String = binding?.note?.text.toString()
                 mobile = value?.getString("phone")
-                println(mobile)
                 var data = HashMap<String, Any>()
                 data.put("date", date!!)
                 data.put("note", note)
                 data.put("bookingtime", FieldValue.serverTimestamp())
-                db?.collection(mobile!!)?.add(data)?.addOnCompleteListener {
+                data.put("id", id!!)
+                db?.collection("visits")?.add(data)?.addOnCompleteListener {
                     if (it.isSuccessful) {
+                        visit = it.result?.id
+                        sucess = true
 
-                        db!!.collection("patiens_info").document(id!!).update("next_visit",date,"hasVisit",true)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Toast.makeText(
-                                        activity,
-                                        "the appointment is confirmed",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                 //   Backtoinfo()
-
-
-                                }
-
-                            }
                     }
 
                 }
 
             }
         }
+        Handler().postDelayed(Runnable {
+            if (sucess) {
+                Addvisit()
+            }
+        }, 1000)
+
     }
 
-    fun Backtoinfo(){
+    fun Backtoinfo() {
         val bundle = Bundle()
         bundle.putString("id", id)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
-        navController.navigate(R.id.action_calendar_to_patientsInfo2,bundle)
+        val navBuilder = NavOptions.Builder()
+        val navOptions: NavOptions = navBuilder.setLaunchSingleTop(true).build()
+        navController.navigate(R.id.action_calendar_to_patientsInfo2, bundle, navOptions)
+    }
+
+    fun Addvisit() {
+        println("first test")
+        var updates = HashMap<String, Any>()
+        updates.put("visit_id", visit!!)
+        updates.put("IsVisit", true)
+        db!!.collection("patiens_info").document(id!!)
+            .update(updates)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    println("Done")
+
+                    activity?.supportFragmentManager?.popBackStack()
+
+                }
+
+
+            }
     }
 }
