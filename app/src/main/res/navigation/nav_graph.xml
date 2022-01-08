@@ -63,4 +63,9 @@
             android:id="@+id/action_calendar_to_patientsInfo2"
             app:destination="@id/patientsInfo" />
     </fragment>
+    <fragment
+        android:id="@+id/schedule"
+        android:name="com.bassem.clinicdoctorapp.schedule.Schedule_Container"
+        android:label="schedule_container"
+        tools:layout="@layout/schedule_container" />
 </navigation>

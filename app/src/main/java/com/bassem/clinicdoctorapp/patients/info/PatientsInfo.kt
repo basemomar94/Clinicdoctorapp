@@ -23,6 +23,8 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     private var fullname: String? = null
     private var handler: String? = null
     var visit_id:String?=null
+    var complain:String?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -79,7 +81,8 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
                 binding!!.ageInfo.text = value?.getDouble("age")?.toInt().toString()
                 binding!!.jobInfo.text = value?.getString("job")
-                binding!!.complainInfo.text = value?.getString("complain")
+                complain=value?.getString("complain")
+                binding!!.complainInfo.text = complain
                 binding!!.mailInfo.text = value?.getString("mail")
                 mobile = value?.getString("phone")
                 binding!!.phoneInfo.text = mobile
@@ -143,6 +146,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     fun GotoBooking() {
         val bundle = Bundle()
         bundle.putString("id", id)
+        bundle.putString("complain",complain)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
         val navBuilder = NavOptions.Builder()
         val navOptions: NavOptions = navBuilder.setLaunchSingleTop(true).build()

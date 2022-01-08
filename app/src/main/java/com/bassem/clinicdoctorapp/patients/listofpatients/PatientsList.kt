@@ -54,8 +54,8 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        patientsArrayList = arrayListOf()
 
+        patientsArrayList = arrayListOf()
         RecycleSetup(patientsArrayList)
         EventChangedListner()
         addnew.setOnClickListener {
