@@ -9,6 +9,7 @@
     tools:context=".home.Home" >
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/today_patiens_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -43,7 +44,53 @@
                     app:srcCompat="@drawable/online" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/pending_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="15"
+                    android:textSize="16sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageVs1iew"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    app:srcCompat="@drawable/done" />
+
+                <TextView
+                    android:id="@+id/done_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:text="15"
+                    android:textSize="16sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imaV1iew"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="8dp"
+                    app:srcCompat="@drawable/cancel" />
+
+                <TextView
+                    android:id="@+id/cancel_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -67,7 +114,7 @@
                     app:srcCompat="@drawable/all" />
 
                 <TextView
-                    android:id="@+id/textView34"
+                    android:id="@+id/all_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -81,9 +128,11 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/current_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:visibility="gone"
         app:cardCornerRadius="10dp">
 
         <LinearLayout
@@ -115,7 +164,7 @@
                     app:srcCompat="@drawable/id" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/current_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -124,6 +173,7 @@
                     android:text="Mohamed Ismail"
                     android:textSize="16sp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -138,7 +188,7 @@
                     app:srcCompat="@drawable/ill" />
 
                 <TextView
-                    android:id="@+id/textVi1ew6"
+                    android:id="@+id/current_complain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

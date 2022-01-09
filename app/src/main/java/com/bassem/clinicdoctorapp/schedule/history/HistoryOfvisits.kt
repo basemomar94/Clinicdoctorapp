@@ -9,12 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bassem.clinic_userapp.ui.booking.Visits
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.HistoryVisitsFragmentBinding
-import com.bassem.clinicdoctorapp.patients.listofpatients.Patientsclass
-import com.bassem.clinicdoctorapp.patients.listofpatients.patientsadapter
-import com.google.common.collect.LinkedHashMultiset
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import java.util.*

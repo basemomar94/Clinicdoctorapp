@@ -9,7 +9,14 @@
         android:id="@+id/home"
         android:name="com.bassem.clinicdoctorapp.home.Home"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" />
+        tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_home_to_schedule"
+            app:destination="@id/schedule" />
+        <action
+            android:id="@+id/action_home_to_patientsInfo"
+            app:destination="@id/patientsInfo" />
+    </fragment>
     <fragment
         android:id="@+id/patients"
         android:name="com.bassem.clinicdoctorapp.patients.listofpatients.PatientsList"

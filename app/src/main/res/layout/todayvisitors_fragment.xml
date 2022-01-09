@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:checked="true"
+            android:checked="false"
             android:text="all" />
 
         <RadioButton
@@ -34,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:checked="true"
             android:text="Pending" />
 
         <RadioButton

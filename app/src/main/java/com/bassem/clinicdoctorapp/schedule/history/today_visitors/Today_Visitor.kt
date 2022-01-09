@@ -9,13 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bassem.clinic_userapp.ui.booking.Visits
+import com.bassem.clinicdoctorapp.schedule.history.Visits
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.TodayvisitorsFragmentBinding
 import com.bassem.clinicdoctorapp.schedule.history.HistoryAdapter
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.core.QueryListener
 import kotlinx.android.synthetic.main.todayvisitors_fragment.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -29,9 +28,11 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
     lateinit var visitsArrayList: ArrayList<Visits>
     lateinit var db: FirebaseFirestore
     lateinit var filter_item:String
+    var clicked:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GetToday()
+
     }
 
     override fun onCreateView(
@@ -46,14 +47,16 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         visitsArrayList = arrayListOf()
-        RecySetup(visitsArrayList)
         EventChangeListner()
+       // Filter("Pending")
+
 
         binding?.filterRadio?.setOnCheckedChangeListener { group, i ->
+            clicked=true
             val selected=view.filter_radio.checkedRadioButtonId
             if (selected!=-1){
                 filter_item=view.findViewById<RadioButton>(selected).text.toString()
-                Filter()
+                Filter(filter_item)
             }
 
         }
@@ -98,6 +101,9 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
                     }
                 }
             )
+        if (!clicked){
+            Filter("Pending")
+        }
 
     }
 
@@ -110,14 +116,14 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
 
 
     }
-    private fun Filter(){
-        if (filter_item == "all"){
+    private fun Filter(item:String){
+        if (item == "all"){
             RecySetup(visitsArrayList)
         } else {
             var filter: ArrayList<Visits> = arrayListOf()
-            for (visit:Visits in visitsArrayList){
+            for (visit: Visits in visitsArrayList){
                 var status=visit.status
-                if (status!!.contains(filter_item)){
+                if (status!!.contains(item)){
                     filter.add(visit)
                 }
             }
