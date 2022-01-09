@@ -67,5 +67,14 @@
         android:id="@+id/schedule"
         android:name="com.bassem.clinicdoctorapp.schedule.Schedule_Container"
         android:label="schedule_container"
-        tools:layout="@layout/schedule_container" />
+        tools:layout="@layout/schedule_container" >
+        <action
+            android:id="@+id/action_schedule_to_expand_visit"
+            app:destination="@id/expand_visit" />
+    </fragment>
+    <fragment
+        android:id="@+id/expand_visit"
+        android:name="com.bassem.clinicdoctorapp.Expand_visit"
+        android:label="visit_expand"
+        tools:layout="@layout/visit_expand" />
 </navigation>

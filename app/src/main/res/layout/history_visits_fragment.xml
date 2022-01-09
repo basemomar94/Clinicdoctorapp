@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content" />
 
             <RadioGroup
+                android:id="@+id/filter_radio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -38,6 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
+                    android:checked="true"
                     android:text="all" />
 
                 <RadioButton
@@ -52,14 +54,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:text="pending" />
+                    android:text="Pending" />
 
                 <RadioButton
                     android:id="@+id/cancelled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:text="cancelled" />
+                    android:text="cancelled " />
             </RadioGroup>
 
             <androidx.recyclerview.widget.RecyclerView

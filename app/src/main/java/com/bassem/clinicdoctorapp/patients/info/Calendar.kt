@@ -26,6 +26,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var id: String? = null
     var visit: String? = null
     var complain:String?=null
+    var fullname:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +35,8 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         if (bundle != null) {
             id = bundle.getString("id")
             complain=bundle.getString("complain")
+            fullname=bundle.getString("name")
+            println(fullname)
         }
     }
 
@@ -89,6 +92,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         data.put("Booked_by", "Clinic")
         data.put("status", "Pending")
         data.put("complain",complain!!)
+        data.put("name",fullname!!)
 
         db?.collection("visits")?.add(data)?.addOnCompleteListener {
             if (it.isSuccessful) {

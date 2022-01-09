@@ -1,4 +1,4 @@
-package com.bassem.clinic_userapp.ui.booking
+package com.bassem.clinicdoctorapp
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
-import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.VisitExpandBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
-class Visitexpand() : Fragment(R.layout.visit_expand) {
+class Expand_visit() : Fragment(R.layout.visit_expand) {
     var _binding: VisitExpandBinding? = null
     val binding get() = _binding
     var visit: String? = null

@@ -25,6 +25,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     var visit_id:String?=null
     var complain:String?=null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -147,6 +148,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         val bundle = Bundle()
         bundle.putString("id", id)
         bundle.putString("complain",complain)
+        bundle.putString("name",fullname)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
         val navBuilder = NavOptions.Builder()
         val navOptions: NavOptions = navBuilder.setLaunchSingleTop(true).build()
