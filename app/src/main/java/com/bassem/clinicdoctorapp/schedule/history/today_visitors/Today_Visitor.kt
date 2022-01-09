@@ -28,7 +28,6 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
     lateinit var visitsArrayList: ArrayList<Visits>
     lateinit var db: FirebaseFirestore
     lateinit var filter_item:String
-    var clicked:Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GetToday()
@@ -47,12 +46,11 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         visitsArrayList = arrayListOf()
+        RecySetup(visitsArrayList)
         EventChangeListner()
-       // Filter("Pending")
 
 
         binding?.filterRadio?.setOnCheckedChangeListener { group, i ->
-            clicked=true
             val selected=view.filter_radio.checkedRadioButtonId
             if (selected!=-1){
                 filter_item=view.findViewById<RadioButton>(selected).text.toString()
@@ -101,9 +99,7 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
                     }
                 }
             )
-        if (!clicked){
-            Filter("Pending")
-        }
+
 
     }
 

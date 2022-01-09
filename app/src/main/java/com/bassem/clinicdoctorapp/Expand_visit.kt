@@ -46,7 +46,7 @@ class Expand_visit() : Fragment(R.layout.visit_expand) {
                 binding?.BookedDate?.text = value?.getString("date")
                 binding?.BookedBy?.text = "Booked by ${value?.getString("Booked_by")}"
                 var status = value?.getString("status")
-                if (status.equals("Done")) {
+                if (status.equals("completed")) {
                     binding?.done1?.visibility = View.VISIBLE
                     binding?.done2?.visibility = View.VISIBLE
                     binding?.done3?.visibility = View.VISIBLE
@@ -55,7 +55,7 @@ class Expand_visit() : Fragment(R.layout.visit_expand) {
                     binding?.visitReq?.text = value?.getString("req")
 
                 } else {
-                    binding?.statusL?.visibility=View.VISIBLE
+                    binding?.statusL?.visibility = View.VISIBLE
                     binding?.bookingStatus?.text = status
 
                 }

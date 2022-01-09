@@ -1,5 +1,6 @@
 package com.bassem.clinicdoctorapp.patients.info
 
+import android.app.Notification
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +16,11 @@ import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.CalendarbookingFragmentBinding
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.okhttp.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.lang.reflect.Field
+
 
 class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var _binding: CalendarbookingFragmentBinding? = null
@@ -25,8 +30,9 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var mobile: String? = null
     var id: String? = null
     var visit: String? = null
-    var complain:String?=null
-    var fullname:String?=null
+    var complain: String? = null
+    var fullname: String? = null
+    var token: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +40,9 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         val bundle = this.arguments
         if (bundle != null) {
             id = bundle.getString("id")
-            complain=bundle.getString("complain")
-            fullname=bundle.getString("name")
+            complain = bundle.getString("complain")
+            fullname = bundle.getString("name")
+            token = bundle.getString("token")
             println(fullname)
         }
     }
@@ -91,8 +98,8 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         data.put("id", id!!)
         data.put("Booked_by", "Clinic")
         data.put("status", "Pending")
-        data.put("complain",complain!!)
-        data.put("name",fullname!!)
+        data.put("complain", complain!!)
+        data.put("name", fullname!!)
 
         db?.collection("visits")?.add(data)?.addOnCompleteListener {
             if (it.isSuccessful) {
@@ -103,7 +110,6 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
             }
 
         }
-
 
 
     }
@@ -119,23 +125,50 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
     fun Addvisit() {
         println("first test")
+
         var updates = HashMap<String, Any>()
         updates.put("visit_id", visit!!)
         updates.put("IsVisit", true)
-        updates.put("next_visit",date!!)
+        updates.put("next_visit", date!!)
 
         db!!.collection("patiens_info").document(id!!)
             .update(updates)
             .addOnCompleteListener {
 
                 if (it.isSuccessful) {
+                    SendBookingNotification()
                     println("Done")
-                    db!!.collection("visits").document(visit!!).update("visit",visit)
+                    db!!.collection("visits").document(visit!!).update("visit", visit)
                     activity?.supportFragmentManager?.popBackStack()
 
                 }
 
 
             }
+    }
+    fun SendBookingNotification(){
+        val servertoken:String="AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
+        val jsonObject: JSONObject= JSONObject()
+        try {
+            jsonObject.put("to",token)
+            jsonObject.put("title","Dr Bassem's clinc")
+            jsonObject.put("body","We have booked you an appointment on $date")
+            val notification:JSONObject= JSONObject()
+            jsonObject.put("notification",notification)
+        } catch (e:JSONException){
+            println(e.message)
+        }
+
+        val mediaType:MediaType=MediaType.parse("application/json")
+        val client: OkHttpClient = OkHttpClient()
+        var body:RequestBody= RequestBody.create(mediaType,jsonObject.toString())
+        val request: Request? =Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST",body).
+        addHeader("Authorization",servertoken).addHeader("Content-Type", "application/json").build()
+        Thread(Runnable {
+        val response:Response=client.newCall(request).execute()
+            println("response=========================================${response.message()}")
+        }).start()
+
+
     }
 }

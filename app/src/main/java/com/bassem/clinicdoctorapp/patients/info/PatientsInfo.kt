@@ -22,8 +22,9 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     var mobile: String? = null
     private var fullname: String? = null
     private var handler: String? = null
-    var visit_id:String?=null
-    var complain:String?=null
+    var visit_id: String? = null
+    var complain: String? = null
+    var token: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,12 +78,13 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
             if (error != null) {
                 println("Firebase error ${error.message}")
             } else {
+                token=value?.getString("token")
                 fullname = value?.getString("fullname")
                 binding!!.fullnameInfo.text = fullname
 
                 binding!!.ageInfo.text = value?.getDouble("age")?.toInt().toString()
                 binding!!.jobInfo.text = value?.getString("job")
-                complain=value?.getString("complain")
+                complain = value?.getString("complain")
                 binding!!.complainInfo.text = complain
                 binding!!.mailInfo.text = value?.getString("mail")
                 mobile = value?.getString("phone")
@@ -97,17 +99,17 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
                     "Miss"
                 }
                 if (value?.getBoolean("IsVisit") == true) {
-                    visit_id=value.getString("visit_id")
+                    visit_id = value.getString("visit_id")
                     binding?.next?.text = value.getString("next_visit")
                     binding?.bookBu?.visibility = View.GONE
                     binding?.cancel?.visibility = View.VISIBLE
                     binding?.nextlinear?.visibility = View.VISIBLE
-                    binding?.prescription?.visibility=View.VISIBLE
+                    binding?.prescription?.visibility = View.VISIBLE
                 } else {
                     binding?.bookBu?.visibility = View.VISIBLE
                     binding?.cancel?.visibility = View.GONE
                     binding?.nextlinear?.visibility = View.GONE
-                    binding?.prescription?.visibility=View.GONE
+                    binding?.prescription?.visibility = View.GONE
 
 
                 }
@@ -147,12 +149,13 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     fun GotoBooking() {
         val bundle = Bundle()
         bundle.putString("id", id)
-        bundle.putString("complain",complain)
-        bundle.putString("name",fullname)
+        bundle.putString("complain", complain)
+        bundle.putString("name", fullname)
+        bundle.putString("token",token)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
         val navBuilder = NavOptions.Builder()
         val navOptions: NavOptions = navBuilder.setLaunchSingleTop(true).build()
-        navController.navigate(R.id.action_patientsInfo_to_calendar, bundle,navOptions)
+        navController.navigate(R.id.action_patientsInfo_to_calendar, bundle, navOptions)
 
     }
 
@@ -170,11 +173,13 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
             }
     }
-    fun CancelOnVisit (){
-        db= FirebaseFirestore.getInstance()
-        db.collection("visits").document(visit_id!!).update("status","cancelled by clinic").addOnCompleteListener {
 
-        }
+    fun CancelOnVisit() {
+        db = FirebaseFirestore.getInstance()
+        db.collection("visits").document(visit_id!!).update("status", "cancelled by clinic")
+            .addOnCompleteListener {
+
+            }
 
     }
 

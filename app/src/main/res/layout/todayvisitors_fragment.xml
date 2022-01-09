@@ -9,7 +9,7 @@
 
     <RadioGroup
         android:id="@+id/filter_radio"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal">
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:checked="false"
+            android:checked="true"
             android:text="all" />
 
         <RadioButton
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:checked="true"
+            android:checked="false"
             android:text="Pending" />
 
         <RadioButton
@@ -48,5 +48,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/today_RV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp" />
 </LinearLayout>
