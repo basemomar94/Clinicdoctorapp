@@ -183,8 +183,9 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
     fun VisitTurn() {
         db = FirebaseFirestore.getInstance()
-        db!!.collection("visits").whereEqualTo("date", date).get().addOnCompleteListener {
+        db!!.collection("visits").whereEqualTo("date", date).whereEqualTo("status","Pending").get().addOnCompleteListener {
             turn = it.result?.size().toString()
+            println("$turn ============test")
             Addvisit()
 
         }
