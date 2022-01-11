@@ -2,12 +2,15 @@ package com.bassem.clinicdoctorapp.patients.info
 
 import android.app.Notification
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -20,6 +23,11 @@ import com.squareup.okhttp.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.reflect.Field
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class Calendar : Fragment(R.layout.calendarbooking_fragment) {
@@ -57,15 +65,28 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         return binding?.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.calendarView?.setOnDateChangeListener { calendarView, year, month, dayofMonth ->
             var realmonth: Int = month + 1
             date = "$dayofMonth-$realmonth-$year"
-            binding?.nextvisit?.text = "Your next visit will be in $date"
-            binding?.card?.visibility = View.VISIBLE
-            binding?.confrimC?.visibility = View.VISIBLE
-            binding?.note?.visibility = View.VISIBLE
+            if (ValidBooking(date!!)) {
+                binding?.nextvisit?.setTextColor(Color.GREEN)
+
+                binding?.nextvisit?.text = AfterDays(date!!)
+                binding?.card?.visibility = View.VISIBLE
+                binding?.confrimC?.visibility = View.VISIBLE
+                binding?.note?.visibility = View.VISIBLE
+            } else {
+                binding?.nextvisit?.setTextColor(Color.RED)
+
+                binding?.nextvisit?.text = "the visit should be in the future"
+                binding?.card?.visibility = View.VISIBLE
+                binding?.confirm?.visibility = View.GONE
+                binding?.note?.visibility = View.GONE
+            }
+
 
         }
         binding?.confirm?.setOnClickListener {
@@ -183,11 +204,39 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
     fun VisitTurn() {
         db = FirebaseFirestore.getInstance()
-        db!!.collection("visits").whereEqualTo("date", date).whereEqualTo("status","Pending").get().addOnCompleteListener {
-            turn = it.result?.size().toString()
-            println("$turn ============test")
-            Addvisit()
+        db!!.collection("visits").whereEqualTo("date", date).whereEqualTo("status", "Pending").get()
+            .addOnCompleteListener {
+                turn = it.result?.size().toString()
+                println("$turn ============test")
+                Addvisit()
 
-        }
+            }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun ValidBooking(date: String): Boolean {
+        val locale = Locale.ENGLISH
+        val sdf = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
+        val visitDate: LocalDate = LocalDate.parse(date, sdf)
+        val dateNow = LocalDate.now()
+        return visitDate >= dateNow
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun AfterDays(date: String): String {
+        var result: String
+        val dateNow = LocalDate.now()
+        val locale = Locale.US
+        val sdf = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
+        val visitDate = LocalDate.parse(date, sdf)
+        if (visitDate == dateNow) {
+            result = "Your visit will be today"
+        } else {
+            var differnt = ChronoUnit.DAYS.between(dateNow, visitDate)
+            result = "Your visit will be after $differnt days"
+        }
+        return result
+
+    }
+
 }
