@@ -1,8 +1,11 @@
 package com.bassem.clinicdoctorapp.patients.newpatients
 
 import android.app.ActionBar
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +25,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.newpatient_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +37,10 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
     var db: FirebaseFirestore? = null
     var userid: String? = null
     private lateinit var auth: FirebaseAuth;
+    var imageuri:Uri?=null
+    var imageUrl :String?=null
+    private val pickImage = 100
+
 
 
 
@@ -70,7 +78,6 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         /*var bottomAppBar=activity?.findViewById<BottomNavigationView>(R.id.bottomAppBar)
         bottomAppBar?.visibility=View.GONE */
         db = Firebase.firestore
-        var viewmodel = ViewModelProvider(this).get(NewpatiensViewmodel::class.java)
         addnow.setOnClickListener {
             binding?.addnow?.text = ""
             binding?.loading?.visibility = View.VISIBLE
@@ -89,6 +96,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
             }
         }
+        binding?.chooseImage?.setOnClickListener { Pick_Image() }
     }
 
     override fun onDestroy() {
@@ -125,7 +133,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 "first_visit" to FieldValue.serverTimestamp(),
                 "id" to userid,
                 "job" to job,
-                "sex" to sex
+                "sex" to sex,
+                "img" to imageUrl
 
             )
 
@@ -172,4 +181,37 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         }
 
     }
+    fun Pick_Image() {
+        var intent:Intent= Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(intent,pickImage)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode==RESULT_OK && requestCode==pickImage ){
+          imageuri=data?.data
+            binding?.selectedImage?.setImageURI(imageuri)
+            UploadtoFirebase(imageuri!!)
+        }
+    }
+    fun UploadtoFirebase (uri:Uri){
+        if (uri!=null){
+            val filename=UUID.randomUUID().toString()+".jpg"
+            val database=FirebaseStorage.getInstance()
+            val storageReference=FirebaseStorage.getInstance().reference.child("newpatient/$filename")
+            storageReference.putFile(uri).addOnSuccessListener {
+                imageUrl="newpatient/$filename"
+
+
+
+            }.addOnProgressListener {
+                var progress= 100* it.bytesTransferred/it.totalByteCount
+                binding?.progressBar?.progress= progress.toInt()
+            }
+
+        }
+
+    }
+
 }

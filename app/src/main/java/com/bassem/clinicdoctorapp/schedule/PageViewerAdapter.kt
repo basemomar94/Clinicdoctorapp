@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bassem.clinicdoctorapp.schedule.history.HistoryOfvisits
 import com.bassem.clinicdoctorapp.schedule.history.today_visitors.Today_Visitor
 
-class PageViewerAdapter (fragmentManager: FragmentManager,lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager,lifecycle) {
+open class PageViewerAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager,lifecycle) {
     override fun getItemCount(): Int {
         return 2
     }

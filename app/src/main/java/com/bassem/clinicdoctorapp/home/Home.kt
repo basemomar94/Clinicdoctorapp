@@ -90,7 +90,7 @@ class Home() : Fragment(R.layout.home_fragment) {
                                     visitsArrayList.add(dc.document.toObject(Visits::class.java))
                                 }
                             }
-                            println(visitsArrayList.size)
+                            println("${visitsArrayList.size}==============doctor size")
                             activity?.runOnUiThread { Filter() }
 
 

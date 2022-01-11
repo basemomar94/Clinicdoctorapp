@@ -74,7 +74,7 @@ class HistoryOfvisits : Fragment(R.layout.history_visits_fragment),HistoryAdapte
     fun EventChangeListner() {
         db = FirebaseFirestore.getInstance()
         db.collection("visits").whereEqualTo("date", selected_date)
-            .orderBy("bookingtime", Query.Direction.ASCENDING).addSnapshotListener(
+            .orderBy("bookingtime", Query.Direction.DESCENDING).addSnapshotListener(
                 object : EventListener<QuerySnapshot> {
                     override fun onEvent(
                         value: QuerySnapshot?,

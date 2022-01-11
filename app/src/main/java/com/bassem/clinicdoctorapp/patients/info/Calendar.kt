@@ -33,6 +33,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var complain: String? = null
     var fullname: String? = null
     var token: String? = null
+    var turn: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,7 +105,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         db?.collection("visits")?.add(data)?.addOnCompleteListener {
             if (it.isSuccessful) {
                 visit = it.result?.id
-                Addvisit()
+                VisitTurn()
                 return@addOnCompleteListener
 
             }
@@ -146,29 +147,46 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
             }
     }
-    fun SendBookingNotification(){
-        val servertoken:String="AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
-        val jsonObject: JSONObject= JSONObject()
+
+    fun SendBookingNotification() {
+        val servertoken: String =
+            "AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
+        val jsonObject: JSONObject = JSONObject()
         try {
-            jsonObject.put("to",token)
-            jsonObject.put("title","Dr Bassem's clinc")
-            jsonObject.put("body","We have booked you an appointment on $date")
-            val notification:JSONObject= JSONObject()
-            jsonObject.put("notification",notification)
-        } catch (e:JSONException){
+            jsonObject.put("to", token)
+            jsonObject.put("title", "Dr Bassem's clinc")
+            jsonObject.put("body", "We have booked you an appointment on $date")
+            val notification: JSONObject = JSONObject()
+            jsonObject.put("notification", notification)
+        } catch (e: JSONException) {
             println(e.message)
         }
 
-        val mediaType:MediaType=MediaType.parse("application/json")
+        val mediaType: MediaType = MediaType.parse("application/json")
         val client: OkHttpClient = OkHttpClient()
-        var body:RequestBody= RequestBody.create(mediaType,jsonObject.toString())
-        val request: Request? =Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST",body).
-        addHeader("Authorization",servertoken).addHeader("Content-Type", "application/json").build()
+        var body: RequestBody = RequestBody.create(mediaType, jsonObject.toString())
+        var testbody: RequestBody = RequestBody.create(
+            mediaType,
+            "{\r\n \"to\" : \"eAJNg0jiSQu5LhJgxib4K7:APA91bEYzF8IdujkKT2e-TlOsbZUWyMr8unjNKgMroQYnYAiZpU9E-3oqhJYEUcOUZnkCxEBV5yUPw1oXOz4GygqWMUJEBiFiieCrdwEeryIsub60A19DORCA9sAN6xtn--3k39bdR5I\",\r\n \"notification\" : {\r\n     \"body\" : \"Body of Your Notification\",\r\n     \"title\": \"Title of Your Notification\"\r\n }\r\n}"
+        )
+        val request: Request? =
+            Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST", testbody)
+                .addHeader("Authorization", servertoken)
+                .addHeader("Content-Type", "application/json").build()
         Thread(Runnable {
-        val response:Response=client.newCall(request).execute()
+            val response: Response = client.newCall(request).execute()
             println("response=========================================${response.message()}")
         }).start()
 
 
+    }
+
+    fun VisitTurn() {
+        db = FirebaseFirestore.getInstance()
+        db!!.collection("visits").whereEqualTo("date", date).get().addOnCompleteListener {
+            turn = it.result?.size().toString()
+            Addvisit()
+
+        }
     }
 }

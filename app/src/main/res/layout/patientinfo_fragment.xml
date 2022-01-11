@@ -310,6 +310,16 @@
             </Button>
 
             <Button
+                android:id="@+id/media"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/custom_but"
+                android:text="Media">
+
+            </Button>
+
+            <Button
                 android:id="@+id/bookBu"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -333,7 +343,7 @@
                 android:layout_marginRight="4dp"
                 android:layout_marginBottom="64dp"
                 android:background="@drawable/custom_but"
-                android:text="Canel" />
+                android:text="Canel Booking" />
         </LinearLayout>
     </ScrollView>
 
