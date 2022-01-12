@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PatientinfoFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 
 class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
@@ -25,10 +26,12 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     var visit_id: String? = null
     var complain: String? = null
     var token: String? = null
+    var today:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GetToday()
     }
 
     override fun onCreateView(
@@ -176,11 +179,21 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
     fun CancelOnVisit() {
         db = FirebaseFirestore.getInstance()
-        db.collection("visits").document(visit_id!!).update("status", "cancelled by clinic")
+        var cancelHashMap=HashMap<String,Any>()
+        cancelHashMap["status"]="cancelled by clinic"
+        cancelHashMap["date"]=today!!
+        db.collection("visits").document(visit_id!!).update(cancelHashMap)
             .addOnCompleteListener {
 
             }
 
+    }
+    fun GetToday() {
+        val calendar: Calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR)
+        today = "$day-$month-$year"
     }
 
 

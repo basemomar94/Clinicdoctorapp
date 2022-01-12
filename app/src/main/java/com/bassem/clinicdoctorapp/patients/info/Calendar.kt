@@ -24,9 +24,11 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.lang.reflect.Field
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.Calendar
 import kotlin.collections.HashMap
 
 
@@ -42,6 +44,9 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var fullname: String? = null
     var token: String? = null
     var turn: String? = null
+    lateinit var estimatedTime: String
+    var book = false
+    var today:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +57,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
             complain = bundle.getString("complain")
             fullname = bundle.getString("name")
             token = bundle.getString("token")
-            println(fullname)
+            GetToday()
         }
     }
 
@@ -78,18 +83,27 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
                 binding?.card?.visibility = View.VISIBLE
                 binding?.confrimC?.visibility = View.VISIBLE
                 binding?.note?.visibility = View.VISIBLE
+                binding?.time?.visibility = View.VISIBLE
+                binding?.time2?.visibility = View.VISIBLE
+                binding?.textView9?.visibility = View.VISIBLE
+
+                VisitTurn()
             } else {
                 binding?.nextvisit?.setTextColor(Color.RED)
 
                 binding?.nextvisit?.text = "the visit should be in the future"
                 binding?.card?.visibility = View.VISIBLE
-                binding?.confirm?.visibility = View.GONE
+                binding?.confrimC?.visibility = View.GONE
                 binding?.note?.visibility = View.GONE
+                binding?.time?.visibility = View.GONE
+                binding?.time2?.visibility = View.GONE
+                binding?.textView9?.visibility = View.GONE
             }
 
 
         }
         binding?.confirm?.setOnClickListener {
+            book = true
             binding?.confirm?.text = ""
             binding?.loading?.visibility = View.VISIBLE
             binding?.confirm?.alpha = .5F
@@ -110,6 +124,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun Book() {
         db = FirebaseFirestore.getInstance()
         var note: String = binding?.note?.text.toString()
@@ -122,6 +137,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         data.put("status", "Pending")
         data.put("complain", complain!!)
         data.put("name", fullname!!)
+        data.put("booking_date",today!!)
 
         db?.collection("visits")?.add(data)?.addOnCompleteListener {
             if (it.isSuccessful) {
@@ -202,14 +218,26 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun VisitTurn() {
         db = FirebaseFirestore.getInstance()
         db!!.collection("visits").whereEqualTo("date", date).whereEqualTo("status", "Pending").get()
             .addOnCompleteListener {
                 turn = it.result?.size().toString()
-                println("$turn ============test")
-                Addvisit()
+                val locale = Locale.ENGLISH
+                if (!book) {
+                    val sdf = DateTimeFormatter.ofPattern("hh:mm a", locale)
+                    val workTime = LocalTime.parse("03:00 PM", sdf)
+                    val waitingTime = 10 * turn!!.toInt()
+                    println(waitingTime)
+                    estimatedTime = sdf.format(workTime.plusMinutes(waitingTime.toLong()))
+                    println(estimatedTime)
+                    binding?.time!!.text = estimatedTime
+                }
 
+                if (book) {
+                    Addvisit()
+                }
             }
     }
 
@@ -237,6 +265,13 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         }
         return result
 
+    }
+    fun GetToday() {
+        val calendar: Calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR)
+        today = "$day-$month-$year"
     }
 
 }

@@ -22,7 +22,7 @@ class Home() : Fragment(R.layout.home_fragment) {
     var db: FirebaseFirestore? = null
     var today: String? = null
     lateinit var visitsArrayList: ArrayList<Visits>
-    var currentPatient_id:String?=null
+    var currentPatient_id: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,15 +59,16 @@ class Home() : Fragment(R.layout.home_fragment) {
 
 
         GetData()
+        GetBookedToday()
 
         binding?.todayPatiensCard?.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_schedule)
         }
         binding?.currentCard?.setOnClickListener {
-            var bundle=Bundle()
-            bundle.putString("id",currentPatient_id)
-            val navController=Navigation.findNavController(activity!!,R.id.nav_host_fragment)
-            navController.navigate(R.id.action_home_to_patientsInfo,bundle)
+            var bundle = Bundle()
+            bundle.putString("id", currentPatient_id)
+            val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+            navController.navigate(R.id.action_home_to_patientsInfo, bundle)
         }
 
     }
@@ -78,27 +79,30 @@ class Home() : Fragment(R.layout.home_fragment) {
             ?.orderBy("bookingtime", Query.Direction.ASCENDING)?.addSnapshotListener(
 
 
-            object : EventListener<QuerySnapshot> {
-                override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                    if (error != null) {
-                        println(error.message)
-                        return
-                    } else {
-                        Thread(Runnable {
-                            for (dc: DocumentChange in value!!.documentChanges) {
-                                if (dc.type == DocumentChange.Type.ADDED) {
-                                    visitsArrayList.add(dc.document.toObject(Visits::class.java))
+                object : EventListener<QuerySnapshot> {
+                    override fun onEvent(
+                        value: QuerySnapshot?,
+                        error: FirebaseFirestoreException?
+                    ) {
+                        if (error != null) {
+                            println(error.message)
+                            return
+                        } else {
+                            Thread(Runnable {
+                                for (dc: DocumentChange in value!!.documentChanges) {
+                                    if (dc.type == DocumentChange.Type.ADDED) {
+                                        visitsArrayList.add(dc.document.toObject(Visits::class.java))
+                                    }
                                 }
-                            }
-                            println("${visitsArrayList.size}==============doctor size")
-                            activity?.runOnUiThread { Filter() }
+                                println("${visitsArrayList.size}==============doctor size")
+                                activity?.runOnUiThread { Filter() }
 
 
-                        }).start()
+                            }).start()
+                        }
+
                     }
-
-                }
-            })
+                })
 
     }
 
@@ -116,46 +120,50 @@ class Home() : Fragment(R.layout.home_fragment) {
         var AllList: ArrayList<Visits> = arrayListOf()
         var cancelList: ArrayList<Visits> = arrayListOf()
         var completList: ArrayList<Visits> = arrayListOf()
-   Thread(Runnable {
-       for (visit: Visits in visitsArrayList) {
-           var status = visit.status
+        Thread(Runnable {
+            for (visit: Visits in visitsArrayList) {
+                var status = visit.status
 
-           if (status == "Pending" || status == "completed") {
-               AllList.add(visit)
-           }
-           if (status == "Pending") {
-               pendingList.add(visit)
-           }
-           if (status!!.contains("Cancel")){
-               cancelList.add(visit)
-           }
-           if (status=="completed"){
-               completList.add(visit)
-           }
+                if (status == "Pending" || status == "completed") {
+                    AllList.add(visit)
+                }
+                if (status == "Pending") {
+                    pendingList.add(visit)
+                }
+                if (status == "cancelled by clinic" || status == "cancelled by You") {
+                    cancelList.add(visit)
+                }
+                if (status == "completed") {
+                    completList.add(visit)
+                }
 
-       }
-       activity?.runOnUiThread {
-           binding?.allHome?.text = AllList.size.toString()
-           binding?.pendingHome?.text = pendingList.size.toString()
+            }
+            activity?.runOnUiThread {
+                binding?.allHome?.text = AllList.size.toString()
+                binding?.pendingHome?.text = pendingList.size.toString()
 
-           if (pendingList.isNotEmpty()){
-               binding?.currentCard?.visibility=View.VISIBLE
-               currentPatient_id=pendingList[0].id
-               binding?.currentName?.text = pendingList[0].name
-               binding?.currentComplain?.text = pendingList[0].complain
+                if (pendingList.isNotEmpty()) {
+                    binding?.currentCard?.visibility = View.VISIBLE
+                    currentPatient_id = pendingList[0].id
+                    binding?.currentName?.text = pendingList[0].name
+                    binding?.currentComplain?.text = pendingList[0].complain
 
-           }
-           binding?.cancelHome?.text=cancelList.size.toString()
-           binding?.doneHome?.text=completList.size.toString()
-       }
-   }).start()
+                }
+                binding?.cancelHome?.text = cancelList.size.toString()
+                binding?.doneHome?.text = completList.size.toString()
+                binding?.todayIncome?.text  ="${(200*completList.size).toString()} EGP"
+            }
+        }).start()
+    }
 
+    fun GetBookedToday() {
+        db = FirebaseFirestore.getInstance()
+        db!!.collection("visits").whereEqualTo("booking_date", today).get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                binding?.bookedToday?.text = it.result?.size().toString()
 
-        println(pendingList.size)
-        println(AllList.size)
+            }
 
-
-
-
+        }
     }
 }
