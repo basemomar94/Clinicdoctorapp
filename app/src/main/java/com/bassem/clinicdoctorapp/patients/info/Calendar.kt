@@ -46,9 +46,9 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     var turn: String? = null
     lateinit var estimatedTime: String
     var book = false
-    var today:String?=null
-    var open:String?=null
-    var waiting:Int?=null
+    var today: String? = null
+    var open: String? = null
+    var waiting: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,7 +140,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         data.put("status", "Pending")
         data.put("complain", complain!!)
         data.put("name", fullname!!)
-        data.put("booking_date",today!!)
+        data.put("booking_date", today!!)
 
         db?.collection("visits")?.add(data)?.addOnCompleteListener {
             if (it.isSuccessful) {
@@ -226,7 +226,19 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
                 val locale = Locale.ENGLISH
                 if (!book) {
                     val sdf = DateTimeFormatter.ofPattern("hh:mm a", locale)
-                    val workTime = LocalTime.parse(open, sdf)
+                    val dateNow = LocalDate.now()
+                    val locale = Locale.US
+                    val sdate = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
+                    val visitDate = LocalDate.parse(date, sdate)
+                    //Booking on the same day problem
+                    var workTime: LocalTime = if (visitDate == dateNow) {
+                        var timeNow = sdf.format(LocalTime.now())
+                        LocalTime.parse(timeNow.toString(), sdf)
+
+                    } else {
+                        LocalTime.parse(open, sdf)
+                    }
+
                     val waitingTime = waiting!! * turn!!.toInt()
                     println(waitingTime)
                     estimatedTime = sdf.format(workTime.plusMinutes(waitingTime.toLong()))
@@ -265,6 +277,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         return result
 
     }
+
     fun GetToday() {
         val calendar: Calendar = Calendar.getInstance()
         val day = calendar.get(Calendar.DAY_OF_MONTH)
@@ -272,14 +285,15 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         val year = calendar.get(Calendar.YEAR)
         today = "$day-$month-$year"
     }
-    fun GetSettings (){
-        db= FirebaseFirestore.getInstance()
+
+    fun GetSettings() {
+        db = FirebaseFirestore.getInstance()
         db!!.collection("settings").document("settings").addSnapshotListener { value, error ->
-            if (error!=null){
+            if (error != null) {
                 println(error.message)
             } else {
-                open= value?.getString("open")
-                waiting= value!!.getString("average")?.toInt()
+                open = value?.getString("open")
+                waiting = value!!.getString("average")?.toInt()
 
             }
         }
