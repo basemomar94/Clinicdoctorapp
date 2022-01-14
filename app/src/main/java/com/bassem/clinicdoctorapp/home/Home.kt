@@ -233,12 +233,17 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
     }
 
     override fun onClick(position: Int) {
-        val id = pendingList!![position].id
+        currentPatient_id = pendingList!![position].id
+        binding?.currentName?.text = pendingList!![position].name
+        binding?.currentComplain?.text = pendingList!![position].complain
+
+
+      /*  val id = pendingList!![position].id
         val bundle = Bundle()
         bundle.putString("id", id)
         val nav = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
         nav.navigate(R.id.action_home_to_patientsInfo, bundle)
-
+*/
 
     }
 

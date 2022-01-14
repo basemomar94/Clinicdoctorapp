@@ -226,11 +226,12 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
                 val locale = Locale.ENGLISH
                 if (!book) {
                     val sdf = DateTimeFormatter.ofPattern("hh:mm a", locale)
+                    //Booking on the same day problem
+
                     val dateNow = LocalDate.now()
                     val locale = Locale.US
                     val sdate = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
                     val visitDate = LocalDate.parse(date, sdate)
-                    //Booking on the same day problem
                     var workTime: LocalTime = if (visitDate == dateNow) {
                         var timeNow = sdf.format(LocalTime.now())
                         LocalTime.parse(timeNow.toString(), sdf)
