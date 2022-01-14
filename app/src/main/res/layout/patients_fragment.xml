@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp"
     android:orientation="vertical"
     tools:context=".patients.listofpatients.PatientsList">
 
@@ -32,7 +31,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="64dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            android:src="@drawable/ic_baseline_person_add_alt_1_24" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

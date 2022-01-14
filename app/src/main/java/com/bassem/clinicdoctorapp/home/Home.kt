@@ -23,6 +23,8 @@ class Home() : Fragment(R.layout.home_fragment) {
     var today: String? = null
     lateinit var visitsArrayList: ArrayList<Visits>
     var currentPatient_id: String? = null
+    var fees:Int?=null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +34,8 @@ class Home() : Fragment(R.layout.home_fragment) {
 
         actionBar?.title = "Home"
         GetToday()
+        GetNewPatient()
+        GetSettings()
 
 
     }
@@ -151,7 +155,7 @@ class Home() : Fragment(R.layout.home_fragment) {
                 }
                 binding?.cancelHome?.text = cancelList.size.toString()
                 binding?.doneHome?.text = completList.size.toString()
-                binding?.todayIncome?.text  ="${(200*completList.size).toString()} EGP"
+                binding?.todayIncome?.text  ="${(fees!!*completList.size).toString()} EGP"
             }
         }).start()
     }
@@ -164,6 +168,29 @@ class Home() : Fragment(R.layout.home_fragment) {
 
             }
 
+        }
+
+    }
+    fun GetNewPatient(){
+        db= FirebaseFirestore.getInstance()
+        db!!.collection("patiens_info").whereEqualTo("registered_date",today).get().addOnCompleteListener {
+            if (it.isSuccessful){
+                if (it.result?.size()!=null){
+                    binding?.newPatients!!.text=it.result?.size().toString()
+                }
+
+            }
+        }
+    }
+    fun GetSettings (){
+        db= FirebaseFirestore.getInstance()
+        db!!.collection("settings").document("settings").addSnapshotListener { value, error ->
+            if (error!=null){
+                println(error.message)
+            } else {
+                fees= value?.getString("fees")?.toInt()
+
+            }
         }
     }
 }

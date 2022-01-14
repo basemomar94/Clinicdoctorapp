@@ -47,6 +47,8 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     lateinit var estimatedTime: String
     var book = false
     var today:String?=null
+    var open:String?=null
+    var waiting:Int?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
             fullname = bundle.getString("name")
             token = bundle.getString("token")
             GetToday()
+            GetSettings()
         }
     }
 
@@ -202,12 +205,8 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         val mediaType: MediaType = MediaType.parse("application/json")
         val client: OkHttpClient = OkHttpClient()
         var body: RequestBody = RequestBody.create(mediaType, jsonObject.toString())
-        var testbody: RequestBody = RequestBody.create(
-            mediaType,
-            "{\r\n \"to\" : \"eAJNg0jiSQu5LhJgxib4K7:APA91bEYzF8IdujkKT2e-TlOsbZUWyMr8unjNKgMroQYnYAiZpU9E-3oqhJYEUcOUZnkCxEBV5yUPw1oXOz4GygqWMUJEBiFiieCrdwEeryIsub60A19DORCA9sAN6xtn--3k39bdR5I\",\r\n \"notification\" : {\r\n     \"body\" : \"Body of Your Notification\",\r\n     \"title\": \"Title of Your Notification\"\r\n }\r\n}"
-        )
         val request: Request? =
-            Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST", testbody)
+            Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST", body)
                 .addHeader("Authorization", servertoken)
                 .addHeader("Content-Type", "application/json").build()
         Thread(Runnable {
@@ -227,8 +226,8 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
                 val locale = Locale.ENGLISH
                 if (!book) {
                     val sdf = DateTimeFormatter.ofPattern("hh:mm a", locale)
-                    val workTime = LocalTime.parse("03:00 PM", sdf)
-                    val waitingTime = 10 * turn!!.toInt()
+                    val workTime = LocalTime.parse(open, sdf)
+                    val waitingTime = waiting!! * turn!!.toInt()
                     println(waitingTime)
                     estimatedTime = sdf.format(workTime.plusMinutes(waitingTime.toLong()))
                     println(estimatedTime)
@@ -272,6 +271,18 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         val month = calendar.get(Calendar.MONTH) + 1
         val year = calendar.get(Calendar.YEAR)
         today = "$day-$month-$year"
+    }
+    fun GetSettings (){
+        db= FirebaseFirestore.getInstance()
+        db!!.collection("settings").document("settings").addSnapshotListener { value, error ->
+            if (error!=null){
+                println(error.message)
+            } else {
+                open= value?.getString("open")
+                waiting= value!!.getString("average")?.toInt()
+
+            }
+        }
     }
 
 }

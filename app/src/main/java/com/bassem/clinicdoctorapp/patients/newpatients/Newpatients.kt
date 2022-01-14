@@ -40,6 +40,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
     var imageuri:Uri?=null
     var imageUrl :String?=null
     private val pickImage = 100
+    var regesited_date:String?=null
 
 
 
@@ -51,6 +52,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
         val actionBar = (activity as MainActivity).supportActionBar
         actionBar?.title="Add a new patient"
+        GetToday()
 
 
 
@@ -134,7 +136,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 "id" to userid,
                 "job" to job,
                 "sex" to sex,
-                "img" to imageUrl
+                "img" to imageUrl,
+                "registered_date" to regesited_date
 
             )
 
@@ -165,10 +168,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
         auth = Firebase.auth
         auth.createUserWithEmailAndPassword(mail, phone.toString()).addOnSuccessListener {
-            println("${it.user?.uid}=========================it====")
-
             userid = auth.uid
-            println("$userid =================auth")
             senddata()
 
 
@@ -212,6 +212,13 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
         }
 
+    }
+    fun GetToday() {
+        val calendar: Calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR)
+        regesited_date = "$day-$month-$year"
     }
 
 }

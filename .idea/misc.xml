@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/drawable-v24/custom_but.xml" value="0.2111111111111111" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/drawable-v24/custom_etxt.xml" value="0.3769230769230769" />
+        <entry key="..\:/Clinicdoctorapp/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.3828125" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/activity_main.xml" value="0.24094202898550723" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/calendarbooking_fragment.xml" value="0.2758152173913043" />
+        <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/fragment_settings.xml" value="0.33605072463768115" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/history_visits_fragment.xml" value="0.35778985507246375" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/home_fragment.xml" value="0.25" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/image_view.xml" value="0.33061594202898553" />
@@ -18,6 +20,7 @@
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/patients_fragment.xml" value="0.2346014492753623" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/prescription_fragment.xml" value="0.2966485507246377" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/schedule_container.xml" value="0.35778985507246375" />
+        <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/settings_fragment.xml" value="0.19375" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/todayvisitors_fragment.xml" value="0.35778985507246375" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/visit.xml" value="0.35778985507246375" />
         <entry key="..\:/Clinicdoctorapp/app/src/main/res/layout/visit_expand.xml" value="0.35778985507246375" />

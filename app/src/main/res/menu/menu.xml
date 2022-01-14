@@ -13,4 +13,8 @@
         android:id="@+id/patients"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="patients" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Settings" />
 </menu>

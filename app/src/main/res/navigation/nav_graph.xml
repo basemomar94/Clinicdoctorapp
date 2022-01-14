@@ -84,4 +84,9 @@
         android:name="com.bassem.clinicdoctorapp.Expand_visit"
         android:label="visit_expand"
         tools:layout="@layout/visit_expand" />
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.bassem.clinicdoctorapp.settings.Settings"
+        android:label="fragment_settings"
+        tools:layout="@layout/settings_fragment" />
 </navigation>
