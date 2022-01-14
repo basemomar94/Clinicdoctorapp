@@ -16,12 +16,12 @@ import com.google.firebase.firestore.EventListener
 import java.util.*
 import kotlin.collections.ArrayList
 
-class HistoryOfvisits : Fragment(R.layout.history_visits_fragment),HistoryAdapter.Myclicklisener {
+class HistoryOfvisits : Fragment(R.layout.history_visits_fragment),VisitsAdapter.Myclicklisener {
     var _binding: HistoryVisitsFragmentBinding? = null
     val binding get() = _binding
     var selected_date: String? = null
     lateinit var recyclerView: RecyclerView
-    lateinit var adapter: HistoryAdapter
+    lateinit var adapter: VisitsAdapter
     lateinit var visitsArrayList: ArrayList<Visits>
     lateinit var uniqueArrayList: ArrayList<Visits>
     lateinit var filter_item: String
@@ -109,7 +109,7 @@ class HistoryOfvisits : Fragment(R.layout.history_visits_fragment),HistoryAdapte
 
     private fun RecycleSetup(list: ArrayList<Visits>) {
         recyclerView = view!!.findViewById(R.id.all_visits_RV)
-        adapter = HistoryAdapter(list,this)
+        adapter = VisitsAdapter(list,this)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter

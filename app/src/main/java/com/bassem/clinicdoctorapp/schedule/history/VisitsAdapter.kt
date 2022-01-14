@@ -7,11 +7,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.R
 
-class HistoryAdapter(
+class VisitsAdapter(
     val visitsList: ArrayList<Visits>,
     val listner: Myclicklisener
 ) :
-    RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
+    RecyclerView.Adapter<VisitsAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,7 +22,7 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val visit: Visits = visitsList[position]
         holder.name.text = visit.name
-        holder.status.text = visit.status
+       // holder.status.text = visit.status
         holder.complain.text=visit.complain
     }
 
@@ -32,7 +32,7 @@ class HistoryAdapter(
 
   inner  class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.name_visit)
-        val status: TextView = itemView.findViewById(R.id.status)
+        //val status: TextView = itemView.findViewById(R.id.status)
         val complain:TextView=itemView.findViewById(R.id.complain_visit)
 
         init {

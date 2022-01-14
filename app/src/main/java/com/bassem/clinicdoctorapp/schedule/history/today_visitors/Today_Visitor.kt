@@ -12,19 +12,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.schedule.history.Visits
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.TodayvisitorsFragmentBinding
-import com.bassem.clinicdoctorapp.schedule.history.HistoryAdapter
+import com.bassem.clinicdoctorapp.schedule.history.VisitsAdapter
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.todayvisitors_fragment.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.Myclicklisener {
+class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),VisitsAdapter.Myclicklisener {
     var _binding: TodayvisitorsFragmentBinding? = null
     val binding get() = _binding
     var today: String? = null
     lateinit var recyclerView: RecyclerView
-    lateinit var adapter: HistoryAdapter
+    lateinit var adapter: VisitsAdapter
     lateinit var visitsArrayList: ArrayList<Visits>
     lateinit var db: FirebaseFirestore
     lateinit var filter_item:String
@@ -104,7 +104,7 @@ class Today_Visitor : Fragment(R.layout.todayvisitors_fragment),HistoryAdapter.M
     }
 
     fun RecySetup(list: ArrayList<Visits>) {
-        adapter = HistoryAdapter(list,this)
+        adapter = VisitsAdapter(list,this)
         recyclerView = view!!.findViewById(R.id.today_RV)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)

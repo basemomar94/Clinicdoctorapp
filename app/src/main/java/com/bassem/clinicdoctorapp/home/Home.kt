@@ -7,24 +7,29 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.schedule.history.Visits
 import com.bassem.clinicdoctorapp.MainActivity
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.HomeFragmentBinding
+import com.bassem.clinicdoctorapp.schedule.history.VisitsAdapter
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Home() : Fragment(R.layout.home_fragment) {
+class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
     var _binding: HomeFragmentBinding? = null
     val binding get() = _binding
     var db: FirebaseFirestore? = null
     var today: String? = null
     lateinit var visitsArrayList: ArrayList<Visits>
     var currentPatient_id: String? = null
-    var fees:Int?=null
-
+    var fees: Int? = null
+    var pendingList: ArrayList<Visits>? = null
+    lateinit var recyclerView: RecyclerView
+    var adapter: VisitsAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,18 +69,37 @@ class Home() : Fragment(R.layout.home_fragment) {
 
         GetData()
         GetBookedToday()
+        pendingList = arrayListOf()
+        WaitingRV(pendingList!!)
 
-        binding?.todayPatiensCard?.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_schedule)
-        }
+
+
         binding?.currentCard?.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("id", currentPatient_id)
             val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
             navController.navigate(R.id.action_home_to_patientsInfo, bundle)
         }
+        binding?.bookedCard?.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_schedule)
+        }
+        binding?.cancelCard?.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_schedule)
 
+
+        }
+        binding?.waitingCard?.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_schedule)
+
+
+        }
+        binding?.completeCard?.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_schedule)
+
+
+        }
     }
+
 
     private fun GetData() {
         db = FirebaseFirestore.getInstance()
@@ -120,7 +144,7 @@ class Home() : Fragment(R.layout.home_fragment) {
     }
 
     fun Filter() {
-        var pendingList: ArrayList<Visits> = arrayListOf()
+
         var AllList: ArrayList<Visits> = arrayListOf()
         var cancelList: ArrayList<Visits> = arrayListOf()
         var completList: ArrayList<Visits> = arrayListOf()
@@ -132,7 +156,8 @@ class Home() : Fragment(R.layout.home_fragment) {
                     AllList.add(visit)
                 }
                 if (status == "Pending") {
-                    pendingList.add(visit)
+                    pendingList!!.add(visit)
+                    println(pendingList!!.size)
                 }
                 if (status == "cancelled by clinic" || status == "cancelled by You") {
                     cancelList.add(visit)
@@ -143,19 +168,20 @@ class Home() : Fragment(R.layout.home_fragment) {
 
             }
             activity?.runOnUiThread {
-                binding?.allHome?.text = AllList.size.toString()
-                binding?.pendingHome?.text = pendingList.size.toString()
 
-                if (pendingList.isNotEmpty()) {
+
+                if (pendingList!!.isNotEmpty()) {
                     binding?.currentCard?.visibility = View.VISIBLE
-                    currentPatient_id = pendingList[0].id
-                    binding?.currentName?.text = pendingList[0].name
-                    binding?.currentComplain?.text = pendingList[0].complain
+                    binding?.waitingCard?.visibility = View.VISIBLE
+                    currentPatient_id = pendingList!![0].id
+                    binding?.currentName?.text = pendingList!![0].name
+                    binding?.currentComplain?.text = pendingList!![0].complain
+                    binding?.waitingTV?.text = "Waiting patients (${pendingList!!.size})"
 
                 }
                 binding?.cancelHome?.text = cancelList.size.toString()
                 binding?.doneHome?.text = completList.size.toString()
-                binding?.todayIncome?.text  ="${(fees!!*completList.size).toString()} EGP"
+                binding?.todayIncome?.text = "${(fees!! * completList.size).toString()} EGP"
             }
         }).start()
     }
@@ -171,26 +197,49 @@ class Home() : Fragment(R.layout.home_fragment) {
         }
 
     }
-    fun GetNewPatient(){
-        db= FirebaseFirestore.getInstance()
-        db!!.collection("patiens_info").whereEqualTo("registered_date",today).get().addOnCompleteListener {
-            if (it.isSuccessful){
-                if (it.result?.size()!=null){
-                    binding?.newPatients!!.text=it.result?.size().toString()
-                }
 
+    fun GetNewPatient() {
+        db = FirebaseFirestore.getInstance()
+        db!!.collection("patiens_info").whereEqualTo("registered_date", today).get()
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    if (it.result?.size() != null) {
+                        binding?.newPatients!!.text = it.result?.size().toString()
+                    }
+
+                }
             }
-        }
     }
-    fun GetSettings (){
-        db= FirebaseFirestore.getInstance()
+
+    fun GetSettings() {
+        db = FirebaseFirestore.getInstance()
         db!!.collection("settings").document("settings").addSnapshotListener { value, error ->
-            if (error!=null){
+            if (error != null) {
                 println(error.message)
             } else {
-                fees= value?.getString("fees")?.toInt()
+                fees = value?.getString("fees")?.toInt()
 
             }
         }
     }
+
+    fun WaitingRV(list: ArrayList<Visits>) {
+
+        recyclerView = view!!.findViewById(R.id.waiting_RV)
+        adapter = VisitsAdapter(list, this)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+    }
+
+    override fun onClick(position: Int) {
+        val id = pendingList!![position].id
+        val bundle = Bundle()
+        bundle.putString("id", id)
+        val nav = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        nav.navigate(R.id.action_home_to_patientsInfo, bundle)
+
+
+    }
+
 }
