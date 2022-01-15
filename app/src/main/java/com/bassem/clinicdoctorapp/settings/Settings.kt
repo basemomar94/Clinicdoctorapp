@@ -8,25 +8,35 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.TimePicker
-import android.widget.Toast
+import android.widget.*
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.SettingsFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.settings_fragment.*
 import java.lang.Exception
+import java.text.FieldPosition
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class Settings : Fragment(R.layout.settings_fragment) {
+class Settings : Fragment(R.layout.settings_fragment),AdapterView.OnItemSelectedListener {
     var _binding: SettingsFragmentBinding? = null
     val binding get() = _binding
     var openingTime: String? = null
     var closingTime: String? = null
     var db: FirebaseFirestore? = null
-
+    var holiDay: String? = null
+    var daysList = arrayOf(
+        "SUNDAY",
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +55,7 @@ class Settings : Fragment(R.layout.settings_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         GetData()
+        val spinner = view.findViewById<Spinner>(R.id.spinner)
         binding?.opening?.setOnClickListener {
             GetOpenTime()
         }
@@ -69,6 +80,17 @@ class Settings : Fragment(R.layout.settings_fragment) {
             }
 
         }
+
+
+        val adapter = ArrayAdapter(
+            context!!,
+            android.R.layout.simple_spinner_item, daysList
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner!!.onItemSelectedListener = this
+
+
 
 
     }
@@ -119,6 +141,7 @@ class Settings : Fragment(R.layout.settings_fragment) {
     }
 
     fun UpdateData() {
+        println(holiDay)
         db = FirebaseFirestore.getInstance()
         val settingsHasmap = HashMap<String, Any>()
         settingsHasmap["close"] = binding?.closing!!.text
@@ -126,6 +149,7 @@ class Settings : Fragment(R.layout.settings_fragment) {
         settingsHasmap["fees"] = binding?.fees!!.text.toString()
         settingsHasmap["average"] = binding?.averageTime!!.text.toString()
         settingsHasmap["max"] = binding?.max!!.text.toString()
+        settingsHasmap["holiday"] = holiDay!!
         db!!.collection("settings").document("settings").set(settingsHasmap)
             .addOnSuccessListener {
                 binding?.confirm!!.text = "Update"
@@ -153,8 +177,17 @@ class Settings : Fragment(R.layout.settings_fragment) {
                 binding?.fees?.setText(value?.getString("fees"))
                 binding?.averageTime?.setText(value?.getString("average"))
                 binding?.max?.setText(value?.getString("max"))
+                holiDay=value?.getString("holiday")
 
             }
         }
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+       holiDay=daysList[position]
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+
     }
 }

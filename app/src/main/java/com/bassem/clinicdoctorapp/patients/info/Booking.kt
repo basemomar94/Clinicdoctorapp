@@ -44,6 +44,7 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
     var today: String? = null
     var open: String? = null
     var waiting: Int? = null
+    var holiDay:String?=null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -302,6 +303,7 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
             } else {
                 open = value?.getString("open")
                 waiting = value!!.getString("average")?.toInt()
+                holiDay=value.getString("holiday")?.trim()
 
             }
         }
@@ -329,8 +331,7 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
         var dayName = daysList[dayNumber - 1]
         println(dayName)
 
-        println(dayName == "FRIDAY")
-        holiday = dayName == "FRIDAY"
+        holiday = dayName == holiDay
 
         return holiday
 
