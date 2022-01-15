@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/calendar"
-        android:name="com.bassem.clinicdoctorapp.patients.info.Calendar"
+        android:name="com.bassem.clinicdoctorapp.patients.info.Booking"
         android:label="calendarbooking_fragment"
         tools:layout="@layout/calendarbooking_fragment" >
         <action

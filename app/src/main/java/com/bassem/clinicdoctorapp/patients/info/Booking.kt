@@ -1,20 +1,15 @@
 package com.bassem.clinicdoctorapp.patients.info
 
-import android.app.Notification
-import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.CalendarbookingFragmentBinding
 import com.google.firebase.firestore.FieldValue
@@ -22,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.okhttp.*
 import org.json.JSONException
 import org.json.JSONObject
-import java.lang.reflect.Field
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -32,7 +27,7 @@ import java.util.Calendar
 import kotlin.collections.HashMap
 
 
-class Calendar : Fragment(R.layout.calendarbooking_fragment) {
+class Booking : Fragment(R.layout.calendarbooking_fragment) {
     var _binding: CalendarbookingFragmentBinding? = null
     val binding get() = _binding
     var date: String? = null
@@ -79,21 +74,32 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         binding?.calendarView?.setOnDateChangeListener { calendarView, year, month, dayofMonth ->
             var realmonth: Int = month + 1
             date = "$dayofMonth-$realmonth-$year"
-            if (ValidBooking(date!!)) {
-                binding?.nextvisit?.setTextColor(Color.GREEN)
 
-                binding?.nextvisit?.text = AfterDays(date!!)
-                binding?.card?.visibility = View.VISIBLE
-                binding?.confrimC?.visibility = View.VISIBLE
-                binding?.note?.visibility = View.VISIBLE
-                binding?.time?.visibility = View.VISIBLE
-                binding?.time2?.visibility = View.VISIBLE
-                binding?.textView9?.visibility = View.VISIBLE
+            if (IsValidBooking(date!!)) {
+                if (IsHoliday()){
+                    binding?.nextvisit?.setTextColor(Color.RED)
+                    binding?.nextvisit?.text = "We are sorry it is our holiday"
+                    binding?.card?.visibility = View.VISIBLE
+                    binding?.confrimC?.visibility = View.GONE
+                    binding?.note?.visibility = View.GONE
+                    binding?.time?.visibility = View.GONE
+                    binding?.time2?.visibility = View.GONE
+                    binding?.textView9?.visibility = View.GONE
+                } else {
+                    binding?.nextvisit?.setTextColor(Color.GREEN)
+                    binding?.nextvisit?.text = AfterDays(date!!)
+                    binding?.card?.visibility = View.VISIBLE
+                    binding?.confrimC?.visibility = View.VISIBLE
+                    binding?.note?.visibility = View.VISIBLE
+                    binding?.time?.visibility = View.VISIBLE
+                    binding?.time2?.visibility = View.VISIBLE
+                    binding?.textView9?.visibility = View.VISIBLE
 
-                VisitTurn()
+                    VisitTurn()
+                }
+
             } else {
                 binding?.nextvisit?.setTextColor(Color.RED)
-
                 binding?.nextvisit?.text = "the visit should be in the future"
                 binding?.card?.visibility = View.VISIBLE
                 binding?.confrimC?.visibility = View.GONE
@@ -255,7 +261,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun ValidBooking(date: String): Boolean {
+    fun IsValidBooking(date: String): Boolean {
         val locale = Locale.ENGLISH
         val sdf = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
         val visitDate: LocalDate = LocalDate.parse(date, sdf)
@@ -299,6 +305,36 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun IsHoliday() :Boolean {
+        var holiday:Boolean
+        val cal = Calendar.getInstance()
+        val locale = Locale.US
+        val sdf = SimpleDateFormat("d-m-yyyy", locale)
+        val calDate: Date = sdf.parse(date)
+        cal.time = calDate
+        var dayNumber: Int = cal.get(Calendar.DAY_OF_WEEK)
+        println(dayNumber)
+        var daysList = listOf<String>(
+            "SUNDAY",
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY"
+        )
+        var dayName = daysList[dayNumber - 1]
+        println(dayName)
+
+        println(dayName == "FRIDAY")
+        holiday = dayName == "FRIDAY"
+
+        return holiday
+
+
     }
 
 }

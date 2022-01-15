@@ -78,7 +78,7 @@ class Settings : Fragment(R.layout.settings_fragment) {
         val cal = Calendar.getInstance()
         val timePickerlistener =
             TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-                cal.set(Calendar.HOUR, hour)
+                cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
                 cal.set(Calendar.AM_PM, cal.get(Calendar.AM_PM))
 
@@ -102,7 +102,7 @@ class Settings : Fragment(R.layout.settings_fragment) {
         val cal = Calendar.getInstance()
         val timePickerlistener =
             TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-                cal.set(Calendar.HOUR, hour)
+                cal.set(Calendar.HOUR_OF_DAY, hour)
                 cal.set(Calendar.MINUTE, minute)
                 cal.set(Calendar.AM_PM, cal.get(Calendar.AM_PM))
                 closingTime = SimpleDateFormat("hh:mm a", Locale.US).format(cal.time).toString()
