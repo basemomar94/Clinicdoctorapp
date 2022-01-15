@@ -12,7 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PrescriptionFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.okhttp.*
 import kotlinx.android.synthetic.main.prescription_fragment.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -26,7 +29,7 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
     var pre: String? = null
     var visit: String? = null
     var sucess: Boolean = false
-    var sucess2: Boolean = false
+    var token: String? = null
 
     var add = HashMap<String, Any>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,8 +119,6 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
         }, 1000)
 
 
-
-
     }
 
     fun gettingData() {
@@ -143,11 +144,11 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
     }
 
     fun Addtovisits() {
-        add.put("status","completed")
+        add.put("status", "completed")
         db = FirebaseFirestore.getInstance()
         db.collection("visits").document(visit!!).update(add).addOnCompleteListener {
             if (it.isSuccessful) {
-             ClearHasvisit()
+                SendRxNotification()
             }
         }
     }
@@ -161,6 +162,38 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
 
             }
         }
+
+    }
+
+    fun SendRxNotification() {
+        val servertoken: String =
+            "key=AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
+        val jsonObject: JSONObject = JSONObject()
+        try {
+            jsonObject.put("to", token)
+            val notification: JSONObject = JSONObject()
+            notification.put("title", "Dr Bassem's clinc")
+            notification.put("body", "Check your recent prescription")
+            jsonObject.put("notification", notification)
+        } catch (e: JSONException) {
+            println(e.message)
+        }
+
+        val mediaType: MediaType = MediaType.parse("application/json")
+        val client: OkHttpClient = OkHttpClient()
+        var body: RequestBody = RequestBody.create(mediaType, jsonObject.toString())
+        val request: Request? =
+            Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST", body)
+                .addHeader("Authorization", servertoken)
+                .addHeader("Content-Type", "application/json").build()
+        Thread(Runnable {
+            val response: Response = client.newCall(request).execute()
+            ClearHasvisit()
+
+
+            println("response=========================================${response.message()}")
+        }).start()
+
 
     }
 

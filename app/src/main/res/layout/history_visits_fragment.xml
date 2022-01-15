@@ -13,6 +13,48 @@
     android:orientation="vertical"
     tools:context=".schedule.history.HistoryOfvisits">
 
+    <CalendarView
+        android:id="@+id/calendarView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/filter_radio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/All"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:checked="true"
+            android:text="all" />
+
+        <RadioButton
+            android:id="@+id/compelted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="completed" />
+
+        <RadioButton
+            android:id="@+id/pending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="Pending" />
+
+        <RadioButton
+            android:id="@+id/cancelled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="cancelled " />
+    </RadioGroup>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -21,48 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <CalendarView
-                android:id="@+id/calendarView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <RadioGroup
-                android:id="@+id/filter_radio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/All"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:checked="true"
-                    android:text="all" />
-
-                <RadioButton
-                    android:id="@+id/compelted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="completed" />
-
-                <RadioButton
-                    android:id="@+id/pending"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="Pending" />
-
-                <RadioButton
-                    android:id="@+id/cancelled"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="cancelled " />
-            </RadioGroup>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/all_visits_RV"

@@ -80,7 +80,10 @@ class Settings : Fragment(R.layout.settings_fragment) {
             TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
                 cal.set(Calendar.HOUR, hour)
                 cal.set(Calendar.MINUTE, minute)
-                openingTime = SimpleDateFormat("hh:mm a",Locale.US).format(cal.time).toString()
+                cal.set(Calendar.AM_PM, cal.get(Calendar.AM_PM))
+
+                openingTime = SimpleDateFormat("hh:mm a", Locale.US).format(cal.time).toString()
+                println("$openingTime======================OO")
                 binding?.opening?.text = openingTime
             }
         TimePickerDialog(
@@ -101,8 +104,8 @@ class Settings : Fragment(R.layout.settings_fragment) {
             TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
                 cal.set(Calendar.HOUR, hour)
                 cal.set(Calendar.MINUTE, minute)
-                cal.set(Calendar.AM_PM,cal.get(Calendar.AM_PM))
-                closingTime = SimpleDateFormat("hh:mm a",Locale.US).format(cal.time).toString()
+                cal.set(Calendar.AM_PM, cal.get(Calendar.AM_PM))
+                closingTime = SimpleDateFormat("hh:mm a", Locale.US).format(cal.time).toString()
                 binding?.closing?.text = closingTime
             }
         TimePickerDialog(
@@ -130,23 +133,23 @@ class Settings : Fragment(R.layout.settings_fragment) {
                 binding?.confirm!!.alpha = 1F
                 binding?.confirm!!.isClickable = true
             }.addOnCompleteListener {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     println("update")
-                    Toast.makeText(context,"Settings has been updated",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Settings has been updated", Toast.LENGTH_LONG).show()
                 }
             }
 
 
     }
-    fun GetData(){
-        db= FirebaseFirestore.getInstance()
+
+    fun GetData() {
+        db = FirebaseFirestore.getInstance()
         db!!.collection("settings").document("settings").addSnapshotListener { value, error ->
-            if (error!=null){
+            if (error != null) {
                 println(error.message)
-            }
-            else {
-                binding?.opening?.text=value?.getString("open")
-                binding?.closing?.text=value?.getString("close")
+            } else {
+                binding?.opening?.text = value?.getString("open")
+                binding?.closing?.text = value?.getString("close")
                 binding?.fees?.setText(value?.getString("fees"))
                 binding?.averageTime?.setText(value?.getString("average"))
                 binding?.max?.setText(value?.getString("max"))

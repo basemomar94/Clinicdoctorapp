@@ -171,6 +171,7 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
 
 
                 if (pendingList!!.isNotEmpty()) {
+                    binding?.waitingCard?.visibility = View.VISIBLE
                     binding?.currentCard?.visibility = View.VISIBLE
                     binding?.waitingCard?.visibility = View.VISIBLE
                     currentPatient_id = pendingList!![0].id
@@ -237,13 +238,6 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
         binding?.currentName?.text = pendingList!![position].name
         binding?.currentComplain?.text = pendingList!![position].complain
 
-
-      /*  val id = pendingList!![position].id
-        val bundle = Bundle()
-        bundle.putString("id", id)
-        val nav = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
-        nav.navigate(R.id.action_home_to_patientsInfo, bundle)
-*/
 
     }
 

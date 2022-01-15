@@ -12,6 +12,9 @@ import androidx.navigation.Navigation
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PatientinfoFragmentBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.okhttp.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.Calendar
 
 
@@ -26,7 +29,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     var visit_id: String? = null
     var complain: String? = null
     var token: String? = null
-    var today:String?=null
+    var today: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +84,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
             if (error != null) {
                 println("Firebase error ${error.message}")
             } else {
-                token=value?.getString("token")
+                token = value?.getString("token")
                 fullname = value?.getString("fullname")
                 binding!!.fullnameInfo.text = fullname
 
@@ -145,6 +148,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
     fun GotoPrescription() {
         val bundle = Bundle()
         bundle.putString("id", id)
+        bundle.putString("token", token)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
         navController.navigate(R.id.action_patientsInfo_to_prescription, bundle)
     }
@@ -154,7 +158,7 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         bundle.putString("id", id)
         bundle.putString("complain", complain)
         bundle.putString("name", fullname)
-        bundle.putString("token",token)
+        bundle.putString("token", token)
         val navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
         val navBuilder = NavOptions.Builder()
         val navOptions: NavOptions = navBuilder.setLaunchSingleTop(true).build()
@@ -179,21 +183,52 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
     fun CancelOnVisit() {
         db = FirebaseFirestore.getInstance()
-        var cancelHashMap=HashMap<String,Any>()
-        cancelHashMap["status"]="cancelled by clinic"
-        cancelHashMap["date"]=today!!
+        var cancelHashMap = HashMap<String, Any>()
+        cancelHashMap["status"] = "cancelled by clinic"
+        cancelHashMap["date"] = today!!
         db.collection("visits").document(visit_id!!).update(cancelHashMap)
             .addOnCompleteListener {
+                SendCancelNotification()
 
             }
 
     }
+
     fun GetToday() {
         val calendar: Calendar = Calendar.getInstance()
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val month = calendar.get(Calendar.MONTH) + 1
         val year = calendar.get(Calendar.YEAR)
         today = "$day-$month-$year"
+    }
+
+    fun SendCancelNotification() {
+        val servertoken: String =
+            "key=AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
+        val jsonObject: JSONObject = JSONObject()
+        try {
+            jsonObject.put("to", token)
+            val notification: JSONObject = JSONObject()
+            notification.put("title", "Dr Bassem's clinc")
+            notification.put("body", "Your appointment has been canceled")
+            jsonObject.put("notification", notification)
+        } catch (e: JSONException) {
+            println(e.message)
+        }
+
+        val mediaType: MediaType = MediaType.parse("application/json")
+        val client: OkHttpClient = OkHttpClient()
+        var body: RequestBody = RequestBody.create(mediaType, jsonObject.toString())
+        val request: Request? =
+            Request.Builder().url("https://fcm.googleapis.com/fcm/send").method("POST", body)
+                .addHeader("Authorization", servertoken)
+                .addHeader("Content-Type", "application/json").build()
+        Thread(Runnable {
+            val response: Response = client.newCall(request).execute()
+            println("response=========================================${response.message()}")
+        }).start()
+
+
     }
 
 

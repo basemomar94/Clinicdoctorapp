@@ -21,6 +21,8 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     lateinit var myAdapter: patientsadapter
     lateinit var db: FirebaseFirestore
     lateinit var id: String
+    var IsSearch = false
+    var filter: ArrayList<Patientsclass>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,7 +110,12 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     }
 
     override fun onClick(position: Int) {
-        val patient = patientsArrayList[position]
+        var patient: Patientsclass = if (IsSearch) {
+            filter?.get(position)!!
+        } else {
+            patientsArrayList[position]
+        }
+
         id = patient.id!!
         var bundle: Bundle = Bundle()
         bundle.putString("id", id)
@@ -124,20 +131,21 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     }
 
     override fun onQueryTextChange(search: String?): Boolean {
-        var filter: ArrayList<Patientsclass> = arrayListOf()
+        IsSearch=true
+        filter = arrayListOf()
         var input: String = search!!.lowercase()
         for (patient: Patientsclass in patientsArrayList) {
             var name = patient.fullname!!.lowercase()
             var phone = patient.phone
             println(name)
             if (name.contains(input) || phone!!.contains(input)) {
-                filter.add(patient)
+                filter!!.add(patient)
 
             }
 
 
         }
-        RecycleSetup(filter)
+        RecycleSetup(filter!!)
         myAdapter.notifyDataSetChanged()
         println("final")
 

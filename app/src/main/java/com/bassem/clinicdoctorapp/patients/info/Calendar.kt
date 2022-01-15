@@ -190,13 +190,14 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
 
     fun SendBookingNotification() {
         val servertoken: String =
-            "AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
+            "key=AAAA8wp6gvE:APA91bGkhZC4jPFfmqTiExrbYIi8-hdgqq1W9cC7EC0CMGRUM37o0a36nez9cQI4LKgNQ2Pc1VrBhL9Y04koZsZ97JCXnrctVYmYiI3LUYWZ2egnLHoxgnOGVn2wJmv_Xv0VU2ynnvGN"
         val jsonObject: JSONObject = JSONObject()
         try {
             jsonObject.put("to", token)
-            jsonObject.put("title", "Dr Bassem's clinc")
-            jsonObject.put("body", "We have booked you an appointment on $date")
             val notification: JSONObject = JSONObject()
+
+            notification.put("title", "Dr Bassem's clinc")
+            notification.put("body", "We have booked you an appointment on $date")
             jsonObject.put("notification", notification)
         } catch (e: JSONException) {
             println(e.message)
@@ -259,7 +260,7 @@ class Calendar : Fragment(R.layout.calendarbooking_fragment) {
         val sdf = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
         val visitDate: LocalDate = LocalDate.parse(date, sdf)
         val dateNow = LocalDate.now()
-        return visitDate >= dateNow
+        return visitDate > dateNow
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

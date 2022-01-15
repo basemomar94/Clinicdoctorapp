@@ -137,7 +137,8 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 "job" to job,
                 "sex" to sex,
                 "img" to imageUrl,
-                "registered_date" to regesited_date
+                "registered_date" to regesited_date,
+                "IsVisit" to false
 
             )
 
