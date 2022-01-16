@@ -11,6 +11,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.PatientinfoFragmentBinding
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.okhttp.*
 import org.json.JSONException
@@ -86,6 +87,11 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
             } else {
                 token = value?.getString("token")
                 fullname = value?.getString("fullname")
+                val link = value?.getString("image")
+                if (link!=null){
+                    SetProfileImage(link)
+                }
+
                 binding!!.fullnameInfo.text = fullname
 
                 binding!!.ageInfo.text = value?.getDouble("age")?.toInt().toString()
@@ -229,6 +235,11 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         }).start()
 
 
+    }
+
+    fun SetProfileImage(link: String) {
+        val imagePath = binding?.profileimage
+        Glide.with(this).load(link).into(imagePath!!)
     }
 
 

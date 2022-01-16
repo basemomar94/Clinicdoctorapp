@@ -44,7 +44,9 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
     var today: String? = null
     var open: String? = null
     var waiting: Int? = null
-    var holiDay:String?=null
+    var holiDay: String? = null
+    var maxPatiens: Int? = null
+    var isFull: Boolean? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,39 +78,7 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
             var realmonth: Int = month + 1
             date = "$dayofMonth-$realmonth-$year"
 
-            if (IsValidBooking(date!!)) {
-                if (IsHoliday()){
-                    binding?.nextvisit?.setTextColor(Color.RED)
-                    binding?.nextvisit?.text = "We are sorry it is our holiday"
-                    binding?.card?.visibility = View.VISIBLE
-                    binding?.confrimC?.visibility = View.GONE
-                    binding?.note?.visibility = View.GONE
-                    binding?.time?.visibility = View.GONE
-                    binding?.time2?.visibility = View.GONE
-                    binding?.textView9?.visibility = View.GONE
-                } else {
-                    binding?.nextvisit?.setTextColor(Color.GREEN)
-                    binding?.nextvisit?.text = AfterDays(date!!)
-                    binding?.card?.visibility = View.VISIBLE
-                    binding?.confrimC?.visibility = View.VISIBLE
-                    binding?.note?.visibility = View.VISIBLE
-                    binding?.time?.visibility = View.VISIBLE
-                    binding?.time2?.visibility = View.VISIBLE
-                    binding?.textView9?.visibility = View.VISIBLE
-
-                    VisitTurn()
-                }
-
-            } else {
-                binding?.nextvisit?.setTextColor(Color.RED)
-                binding?.nextvisit?.text = "the visit should be in the future"
-                binding?.card?.visibility = View.VISIBLE
-                binding?.confrimC?.visibility = View.GONE
-                binding?.note?.visibility = View.GONE
-                binding?.time?.visibility = View.GONE
-                binding?.time2?.visibility = View.GONE
-                binding?.textView9?.visibility = View.GONE
-            }
+            IsDayFull(date!!)
 
 
         }
@@ -303,15 +273,17 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
             } else {
                 open = value?.getString("open")
                 waiting = value!!.getString("average")?.toInt()
-                holiDay=value.getString("holiday")?.trim()
+                holiDay = value.getString("holiday")?.trim()
+                maxPatiens = value.getString("max")?.trim()?.toInt()
+
 
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun IsHoliday() :Boolean {
-        var holiday:Boolean
+    fun IsHoliday(): Boolean {
+        var holiday: Boolean
         val cal = Calendar.getInstance()
         val locale = Locale.US
         val sdf = SimpleDateFormat("d-m-yyyy", locale)
@@ -337,5 +309,69 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
 
 
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun IsDayFull(date: String) {
+        var currentPatients: Int? = null
+        db = FirebaseFirestore.getInstance()
+        db!!.collection("visits").whereEqualTo("date", date).whereEqualTo("status", "Pending").get()
+            .addOnCompleteListener {
+                currentPatients = it.result?.size()
+                println(currentPatients)
+                println(maxPatiens)
+                isFull = maxPatiens!! <= currentPatients!!
+                if (isFull!!) {
+                    binding?.nextvisit?.setTextColor(Color.RED)
+                    binding?.card?.visibility = View.VISIBLE
+                    binding?.confirm?.visibility = View.GONE
+                    binding?.note?.visibility = View.GONE
+                    binding?.time?.visibility = View.GONE
+                    binding?.time2?.visibility = View.GONE
+                    binding?.textView9?.visibility = View.GONE
+                    binding?.nextvisit?.text =
+                        "We are sorry, we have reached maximum patients for these day, check another date"
+
+                } else {
+                    if (IsValidBooking(date!!)) {
+                        if (IsHoliday()) {
+                            binding?.nextvisit?.setTextColor(Color.RED)
+                            binding?.nextvisit?.text = "We are sorry it is our holiday"
+                            binding?.card?.visibility = View.VISIBLE
+                            binding?.confrimC?.visibility = View.GONE
+                            binding?.note?.visibility = View.GONE
+                            binding?.time?.visibility = View.GONE
+                            binding?.time2?.visibility = View.GONE
+                            binding?.textView9?.visibility = View.GONE
+
+                        } else {
+                            binding?.nextvisit?.setTextColor(Color.GREEN)
+                            binding?.nextvisit?.text = AfterDays(date!!)
+                            binding?.card?.visibility = View.VISIBLE
+                            binding?.confirm?.visibility = View.VISIBLE
+                            binding?.note?.visibility = View.VISIBLE
+                            binding?.time?.visibility = View.VISIBLE
+                            binding?.time2?.visibility = View.VISIBLE
+                            binding?.textView9?.visibility = View.VISIBLE
+                            VisitTurn()
+                        }
+
+                    } else {
+                        binding?.nextvisit?.setTextColor(Color.RED)
+                        binding?.nextvisit?.text = "the visit should be in the future"
+                        binding?.card?.visibility = View.VISIBLE
+                        binding?.confrimC?.visibility = View.GONE
+                        binding?.note?.visibility = View.GONE
+                        binding?.time?.visibility = View.GONE
+                        binding?.time2?.visibility = View.GONE
+                        binding?.textView9?.visibility = View.GONE
+
+
+                    }
+
+                }
+            }
+
+    }
+
 
 }

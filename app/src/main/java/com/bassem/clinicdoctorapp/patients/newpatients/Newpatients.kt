@@ -1,6 +1,5 @@
 package com.bassem.clinicdoctorapp.patients.newpatients
 
-import android.app.ActionBar
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
@@ -9,16 +8,12 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.MainActivity
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.NewpatientFragmentBinding
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
@@ -27,7 +22,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.newpatient_fragment.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class Newpatients() : Fragment(R.layout.newpatient_fragment) {
@@ -38,7 +32,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
     var userid: String? = null
     private lateinit var auth: FirebaseAuth;
     var imageuri:Uri?=null
-    var imageUrl :String?=null
+    var imageLink :String?=null
     private val pickImage = 100
     var regesited_date:String?=null
 
@@ -125,6 +119,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
             && phone.toString().isNotEmpty() && age.toString().isNotEmpty() && mail.isNotEmpty()
 
         ) {
+            val defaultImage="https://firebasestorage.googleapis.com/v0/b/clinicapp-884ba.appspot.com/o/profile%2Fpatient.png?alt=media&token=a3a1c853-a490-40e2-a431-a783bc7b1ad1"
             val user = hashMapOf(
                 "fullname" to name,
                 "age" to age,
@@ -136,9 +131,10 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 "id" to userid,
                 "job" to job,
                 "sex" to sex,
-                "img" to imageUrl,
+                "img" to imageLink,
                 "registered_date" to regesited_date,
-                "IsVisit" to false
+                "IsVisit" to false,
+                "image" to defaultImage
 
             )
 
@@ -202,7 +198,7 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
             val database=FirebaseStorage.getInstance()
             val storageReference=FirebaseStorage.getInstance().reference.child("newpatient/$filename")
             storageReference.putFile(uri).addOnSuccessListener {
-                imageUrl="newpatient/$filename"
+                imageLink="newpatient/$filename"
 
 
 

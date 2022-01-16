@@ -43,6 +43,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
         super.onResume()
         val actionBar = (activity as MainActivity).supportActionBar
         actionBar?.title = ""
+        EventChangedListner()
     }
 
     override fun onCreateView(
@@ -58,6 +59,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
         setHasOptionsMenu(true)
 
         patientsArrayList = arrayListOf()
+        recyclerView = view.findViewById(R.id.patientsRV)
       //  RecycleSetup(patientsArrayList)
         EventChangedListner()
         addnew.setOnClickListener {
@@ -68,7 +70,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     }
 
     private fun RecycleSetup(list: ArrayList<Patientsclass>) {
-        recyclerView = view!!.findViewById(R.id.patientsRV)
+
         myAdapter = patientsadapter(list, this)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
