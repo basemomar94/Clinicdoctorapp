@@ -27,8 +27,9 @@ class Settings : Fragment(R.layout.settings_fragment),AdapterView.OnItemSelected
     var openingTime: String? = null
     var closingTime: String? = null
     var db: FirebaseFirestore? = null
-    var holiDay: String? = null
-    var daysList = arrayOf(
+    private var holiDay: String? = null
+    private var daysList = arrayOf(
+        "ـــــــــــــــــــــــــــــــــــ",
         "SUNDAY",
         "MONDAY",
         "TUESDAY",
@@ -89,6 +90,11 @@ class Settings : Fragment(R.layout.settings_fragment),AdapterView.OnItemSelected
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner!!.onItemSelectedListener = this
+        binding?.holidayTV?.setOnClickListener {
+            binding?.holidayTV!!.visibility=View.GONE
+            binding?.spinner!!.visibility=View.VISIBLE
+
+        }
 
 
 
@@ -158,7 +164,8 @@ class Settings : Fragment(R.layout.settings_fragment),AdapterView.OnItemSelected
                 binding?.confirm!!.isClickable = true
             }.addOnCompleteListener {
                 if (it.isSuccessful) {
-                    println("update")
+                    binding?.holidayTV!!.visibility=View.VISIBLE
+                    binding?.spinner!!.visibility=View.GONE
                     Toast.makeText(context, "Settings has been updated", Toast.LENGTH_LONG).show()
                 }
             }
@@ -177,6 +184,7 @@ class Settings : Fragment(R.layout.settings_fragment),AdapterView.OnItemSelected
                 binding?.fees?.setText(value?.getString("fees"))
                 binding?.averageTime?.setText(value?.getString("average"))
                 binding?.max?.setText(value?.getString("max"))
+                binding?.holidayTV?.text=value?.getString("holiday")
                 holiDay=value?.getString("holiday")
 
             }
