@@ -29,7 +29,7 @@ class Settings : Fragment(R.layout.settings_fragment),AdapterView.OnItemSelected
     var db: FirebaseFirestore? = null
     private var holiDay: String? = null
     private var daysList = arrayOf(
-        "ـــــــــــــــــــــــــــــــــــ",
+        "ـــــــــــــــــــــــــــــــ",
         "SUNDAY",
         "MONDAY",
         "TUESDAY",

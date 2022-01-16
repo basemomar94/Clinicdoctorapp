@@ -58,7 +58,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
         setHasOptionsMenu(true)
 
         patientsArrayList = arrayListOf()
-        RecycleSetup(patientsArrayList)
+      //  RecycleSetup(patientsArrayList)
         EventChangedListner()
         addnew.setOnClickListener {
             findNavController().navigate(R.id.action_patients_to_newpatients)
@@ -95,6 +95,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
                         }
                         activity?.runOnUiThread {
+                            RecycleSetup(patientsArrayList)
                             myAdapter.notifyDataSetChanged()
 
                         }
