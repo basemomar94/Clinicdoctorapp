@@ -316,60 +316,63 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
         db = FirebaseFirestore.getInstance()
         db!!.collection("visits").whereEqualTo("date", date).whereEqualTo("status", "Pending").get()
             .addOnCompleteListener {
-                currentPatients = it.result?.size()
-                println(currentPatients)
-                println(maxPatiens)
-                isFull = maxPatiens!! <= currentPatients!!
+                if (it.isSuccessful) {
+                    currentPatients = it.result?.size()
+                    println(currentPatients)
+                    println(maxPatiens)
+                    isFull = maxPatiens!! <= currentPatients!!
+                }
                 if (isFull!!) {
-                    binding?.nextvisit?.setTextColor(Color.RED)
-                    binding?.card?.visibility = View.VISIBLE
-                    binding?.confirm?.visibility = View.GONE
-                    binding?.note?.visibility = View.GONE
-                    binding?.time?.visibility = View.GONE
-                    binding?.time2?.visibility = View.GONE
-                    binding?.textView9?.visibility = View.GONE
-                    binding?.nextvisit?.text =
+
+                    BookingUnavaiable(
                         "We are sorry, we have reached maximum patients for these day, check another date"
+                    )
+
 
                 } else {
-                    if (IsValidBooking(date!!)) {
+                    if (IsValidBooking(date)) {
                         if (IsHoliday()) {
-                            binding?.nextvisit?.setTextColor(Color.RED)
-                            binding?.nextvisit?.text = "We are sorry it is our holiday"
-                            binding?.card?.visibility = View.VISIBLE
-                            binding?.confrimC?.visibility = View.GONE
-                            binding?.note?.visibility = View.GONE
-                            binding?.time?.visibility = View.GONE
-                            binding?.time2?.visibility = View.GONE
-                            binding?.textView9?.visibility = View.GONE
+                            BookingUnavaiable("We are sorry it is our holiday")
 
                         } else {
-                            binding?.nextvisit?.setTextColor(Color.GREEN)
-                            binding?.nextvisit?.text = AfterDays(date!!)
-                            binding?.card?.visibility = View.VISIBLE
-                            binding?.confirm?.visibility = View.VISIBLE
-                            binding?.note?.visibility = View.VISIBLE
-                            binding?.time?.visibility = View.VISIBLE
-                            binding?.time2?.visibility = View.VISIBLE
-                            binding?.textView9?.visibility = View.VISIBLE
-                            VisitTurn()
+                            BookingAvailable()
                         }
 
                     } else {
-                        binding?.nextvisit?.setTextColor(Color.RED)
-                        binding?.nextvisit?.text = "the visit should be in the future"
-                        binding?.card?.visibility = View.VISIBLE
-                        binding?.confrimC?.visibility = View.GONE
-                        binding?.note?.visibility = View.GONE
-                        binding?.time?.visibility = View.GONE
-                        binding?.time2?.visibility = View.GONE
-                        binding?.textView9?.visibility = View.GONE
+                       BookingUnavaiable("the visit should be in the future")
 
 
                     }
 
                 }
             }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun BookingAvailable() {
+        binding?.nextvisit?.setTextColor(Color.GREEN)
+        binding?.nextvisit?.text = AfterDays(date!!)
+        binding?.card?.visibility = View.VISIBLE
+        binding?.confrimC?.visibility = View.VISIBLE
+        binding?.confirm?.visibility=View.VISIBLE
+        binding?.note?.visibility = View.VISIBLE
+        binding?.time?.visibility = View.VISIBLE
+        binding?.time2?.visibility = View.VISIBLE
+        binding?.textView9?.visibility = View.VISIBLE
+        VisitTurn()
+    }
+
+    fun BookingUnavaiable(errorMessage: String) {
+        binding?.nextvisit?.setTextColor(Color.RED)
+        binding?.card?.visibility = View.VISIBLE
+        binding?.confirm?.visibility = View.GONE
+        binding?.note?.visibility = View.GONE
+        binding?.time?.visibility = View.GONE
+        binding?.time2?.visibility = View.GONE
+        binding?.textView9?.visibility = View.GONE
+        binding?.nextvisit?.text = errorMessage
+
 
     }
 

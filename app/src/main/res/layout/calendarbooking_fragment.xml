@@ -117,7 +117,7 @@
                     android:layout_height="60dp"
                     android:layout_margin="8dp"
                     android:background="@drawable/custom_but"
-                    android:text="add"
+                    android:text="Confirm"
                     android:visibility="visible" />
             </FrameLayout>
 
