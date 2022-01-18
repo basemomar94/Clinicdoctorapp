@@ -3,6 +3,7 @@ package com.bassem.clinicdoctorapp.patients.listofpatients
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.R
@@ -12,6 +13,7 @@ import java.util.ArrayList
 class patientsadapter(
     val patientsList: ArrayList<Patientsclass>,
     val listner: Myclicklisener,
+    val removelistner:Myremovelistener
 ) :
     RecyclerView.Adapter<patientsadapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): patientsadapter.ViewHolder {
@@ -36,6 +38,7 @@ class patientsadapter(
         val fullname: TextView = itemview.findViewById(R.id.name_list)
         val complain: TextView = itemview.findViewById(R.id.complain_list)
         val phone: TextView = itemview.findViewById(R.id.phone_list)
+        val remove:ImageView=itemview.findViewById(R.id.remove)
 
         init {
 
@@ -45,7 +48,13 @@ class patientsadapter(
                 println(position)
 
 
+
             }
+            remove.setOnClickListener {
+                val position:Int=absoluteAdapterPosition
+                removelistner.onRemoveClick(position)
+            }
+
         }
 
 
@@ -54,6 +63,9 @@ class patientsadapter(
     interface Myclicklisener {
         fun onClick(position: Int)
 
+    }
+    interface Myremovelistener{
+        fun onRemoveClick(position: Int)
     }
 
 

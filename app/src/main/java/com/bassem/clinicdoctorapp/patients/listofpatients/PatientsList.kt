@@ -13,7 +13,7 @@ import com.bassem.clinicdoctorapp.R
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.patients_fragment.*
 
-class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myclicklisener,
+class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myclicklisener,patientsadapter.Myremovelistener,
     SearchView.OnQueryTextListener {
 
     lateinit var recyclerView: RecyclerView
@@ -22,7 +22,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     lateinit var db: FirebaseFirestore
     lateinit var id: String
     var IsSearch = false
-    var filter: ArrayList<Patientsclass>? = null
+    var filterArrayList: ArrayList<Patientsclass>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +71,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
     private fun RecycleSetup(list: ArrayList<Patientsclass>) {
 
-        myAdapter = patientsadapter(list, this)
+        myAdapter = patientsadapter(list, this,this)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = myAdapter
@@ -114,7 +114,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
     override fun onClick(position: Int) {
         var patient: Patientsclass = if (IsSearch) {
-            filter?.get(position)!!
+            filterArrayList?.get(position)!!
         } else {
             patientsArrayList[position]
         }
@@ -135,24 +135,52 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
     override fun onQueryTextChange(search: String?): Boolean {
         IsSearch=true
-        filter = arrayListOf()
+        filterArrayList = arrayListOf()
         var input: String = search!!.lowercase()
         for (patient: Patientsclass in patientsArrayList) {
             var name = patient.fullname!!.lowercase()
             var phone = patient.phone
             println(name)
             if (name.contains(input) || phone!!.contains(input)) {
-                filter!!.add(patient)
+                filterArrayList!!.add(patient)
 
             }
 
 
         }
-        RecycleSetup(filter!!)
+        RecycleSetup(filterArrayList!!)
         myAdapter.notifyDataSetChanged()
         println("final")
 
         return true
+
+    }
+
+    override fun onRemoveClick(position: Int) {
+
+       removePatient(position)
+    }
+
+    fun removePatient (position: Int){
+        val patient:Patientsclass = if (IsSearch){
+            filterArrayList!![position]
+        } else {
+            patientsArrayList[position]
+        }
+        val patientId=patient.id
+        db= FirebaseFirestore.getInstance()
+        db.collection("patiens_info").document(patientId!!).delete().addOnSuccessListener {
+
+            if (IsSearch){
+                filterArrayList?.removeAt(position)
+            } else {
+                patientsArrayList.removeAt(position)
+            }
+            myAdapter.notifyItemRemoved(position)
+
+        }
+
+
 
     }
 

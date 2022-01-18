@@ -327,8 +327,6 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
                     BookingUnavaiable(
                         "We are sorry, we have reached maximum patients for these day, check another date"
                     )
-
-
                 } else {
                     if (IsValidBooking(date)) {
                         if (IsHoliday()) {
