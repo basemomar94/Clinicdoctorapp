@@ -1,5 +1,6 @@
 package com.bassem.clinicdoctorapp.patients.info
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -72,7 +73,13 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
             GotoBooking()
         }
         binding?.cancel?.setOnClickListener {
-            Cancel()
+            val builder= AlertDialog.Builder(context)
+            builder.setMessage("Are you sure to cancel this booking")
+            builder.setPositiveButton("yes"){ builder, _ ->Cancel()}
+            builder.setNegativeButton("No"){ builder, _ ->builder.dismiss()}
+            builder.setTitle("Cancel booking")
+            builder.show()
+
         }
 
     }

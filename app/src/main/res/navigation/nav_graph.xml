@@ -89,4 +89,9 @@
         android:name="com.bassem.clinicdoctorapp.settings.Settings"
         android:label="fragment_settings"
         tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/statics"
+        android:name="com.bassem.clinicdoctorapp.statics.Statics"
+        android:label="statics_fragment"
+        tools:layout="@layout/statics_fragment" />
 </navigation>

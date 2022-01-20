@@ -6,5 +6,6 @@ class Visits(
     val visit:String?=null,
     val complain:String?=null,
     val name:String?=null,
-    val id:String?=null
+    val id:String?=null,
+    var booking_date:String?=null
 )

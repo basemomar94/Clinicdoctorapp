@@ -11,6 +11,24 @@
     tools:context=".patients.info.PatientsInfo">
 
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="10dp"
+        app:cardCornerRadius="100dp"
+
+        >
+
+        <ImageView
+            android:id="@+id/profileimage"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"
+            android:src="@drawable/patient" />
+    </androidx.cardview.widget.CardView>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,26 +56,6 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            app:cardCornerRadius="100dp"
-                            android:layout_margin="5dp"
-                            android:elevation="10dp"
-
-                            >
-
-                            <ImageView
-                                android:id="@+id/profileimage"
-                                android:layout_width="128dp"
-                                android:layout_height="128dp"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_margin="8dp"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/patient" />
-                        </androidx.cardview.widget.CardView>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -176,9 +174,9 @@
                                 android:id="@+id/phone_info2"
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_margin="4dp"
                                 android:inputType="number"
-                                android:minHeight="48dp"
                                 android:padding="8dp"
                                 android:text="Phone"
                                 android:textColor="@color/black"
@@ -188,12 +186,33 @@
                                 android:id="@+id/phone_info"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_margin="4dp"
-                                android:layout_weight="1"
-                                android:ems="10"
                                 android:inputType="number"
-                                android:minHeight="48dp"
                                 android:padding="8dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="right|end"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/whatsapp"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="4dp"
+                                    android:src="@drawable/whatsapp" />
+
+                                <ImageView
+                                    android:id="@+id/call"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="4dp"
+                                    android:src="@drawable/call" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -361,10 +380,9 @@
                                 android:id="@+id/next2"
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_margin="4dp"
-                                android:gravity="start|top"
                                 android:inputType="textMultiLine"
-                                android:minHeight="48dp"
                                 android:padding="8dp"
                                 android:text="next visit"
                                 android:textColor="@color/black"
@@ -372,46 +390,26 @@
 
                             <TextView
                                 android:id="@+id/next"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_margin="4dp"
-                                android:layout_weight="1"
-                                android:ems="10"
-                                android:gravity="start|top"
                                 android:inputType="textMultiLine"
-                                android:minHeight="48dp"
                                 android:padding="8dp" />
+
+                            <ImageView
+                                android:id="@+id/cancel"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="4dp"
+                                android:src="@drawable/cancel" />
 
                         </LinearLayout>
 
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:id="@+id/buttonsH"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/call"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_but"
-                        android:text="Call" />
-
-                    <Button
-                        android:id="@+id/whatsapp"
-                        android:layout_width="0dp"
-                        android:layout_height="60dp"
-                        android:layout_margin="4dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/custom_but"
-                        android:text="Whatsapp" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -434,7 +432,8 @@
                         android:layout_height="60dp"
                         android:layout_margin="4dp"
                         android:background="@drawable/custom_but"
-                        android:text="Media">
+                        android:text="Media"
+                        android:visibility="gone">
 
                     </Button>
 
@@ -450,18 +449,6 @@
                         android:background="@drawable/custom_but"
                         android:text="Booking" />
 
-                    <Button
-                        android:id="@+id/cancel"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginRight="4dp"
-                        android:layout_marginBottom="64dp"
-                        android:background="@drawable/custom_but"
-                        android:text="Canel Booking" />
                 </LinearLayout>
 
             </LinearLayout>

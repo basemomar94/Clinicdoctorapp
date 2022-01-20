@@ -1,11 +1,13 @@
 package com.bassem.clinicdoctorapp.patients.listofpatients
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bassem.clinicdoctorapp.MainActivity
@@ -13,7 +15,8 @@ import com.bassem.clinicdoctorapp.R
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.patients_fragment.*
 
-class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myclicklisener,patientsadapter.Myremovelistener,
+class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myclicklisener,
+    patientsadapter.Myremovelistener,
     SearchView.OnQueryTextListener {
 
     lateinit var recyclerView: RecyclerView
@@ -43,7 +46,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
         super.onResume()
         val actionBar = (activity as MainActivity).supportActionBar
         actionBar?.title = ""
-        EventChangedListner()
+        // EventChangedListner()
     }
 
     override fun onCreateView(
@@ -60,7 +63,8 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
         patientsArrayList = arrayListOf()
         recyclerView = view.findViewById(R.id.patientsRV)
-      //  RecycleSetup(patientsArrayList)
+        Swipe()
+        //  RecycleSetup(patientsArrayList)
         EventChangedListner()
         addnew.setOnClickListener {
             findNavController().navigate(R.id.action_patients_to_newpatients)
@@ -71,10 +75,11 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
     private fun RecycleSetup(list: ArrayList<Patientsclass>) {
 
-        myAdapter = patientsadapter(list, this,this)
+        myAdapter = patientsadapter(list, this, this)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = myAdapter
+
     }
 
 
@@ -134,7 +139,7 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     }
 
     override fun onQueryTextChange(search: String?): Boolean {
-        IsSearch=true
+        IsSearch = true
         filterArrayList = arrayListOf()
         var input: String = search!!.lowercase()
         for (patient: Patientsclass in patientsArrayList) {
@@ -157,21 +162,25 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
     }
 
     override fun onRemoveClick(position: Int) {
-
-       removePatient(position)
+        val builder = AlertDialog.Builder(context)
+        builder.setMessage("Are you sure to delete this patient")
+        builder.setPositiveButton("yes") { builder, which -> removePatient(position) }
+        builder.setNegativeButton("cancel") { builder, which -> builder.dismiss() }
+        builder.setTitle("Delete patient")
+        builder.show()
     }
 
-    fun removePatient (position: Int){
-        val patient:Patientsclass = if (IsSearch){
+    fun removePatient(position: Int) {
+        val patient: Patientsclass = if (IsSearch) {
             filterArrayList!![position]
         } else {
             patientsArrayList[position]
         }
-        val patientId=patient.id
-        db= FirebaseFirestore.getInstance()
+        val patientId = patient.id
+        db = FirebaseFirestore.getInstance()
         db.collection("patiens_info").document(patientId!!).delete().addOnSuccessListener {
 
-            if (IsSearch){
+            if (IsSearch) {
                 filterArrayList?.removeAt(position)
             } else {
                 patientsArrayList.removeAt(position)
@@ -180,6 +189,33 @@ class PatientsList() : Fragment(R.layout.patients_fragment), patientsadapter.Myc
 
         }
 
+
+    }
+
+    fun Swipe() {
+        val itemTouchHelperCallback =
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.absoluteAdapterPosition
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Are you sure to delete this patient")
+                    builder.setPositiveButton("yes") { builder, which -> removePatient(position) }
+                    builder.setNegativeButton("cancel") { builder, which -> myAdapter.notifyDataSetChanged() }
+                    builder.setTitle("Delete patient")
+                    builder.show()
+                }
+
+            }
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
 
     }
