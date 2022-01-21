@@ -283,15 +283,15 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun IsHoliday(): Boolean {
-        var holiday: Boolean
+        val holiday: Boolean
         val cal = Calendar.getInstance()
         val locale = Locale.US
         val sdf = SimpleDateFormat("d-m-yyyy", locale)
         val calDate: Date = sdf.parse(date)
         cal.time = calDate
-        var dayNumber: Int = cal.get(Calendar.DAY_OF_WEEK)
+        val dayNumber: Int = cal.get(Calendar.DAY_OF_WEEK)
         println(dayNumber)
-        var daysList = listOf<String>(
+        val daysList = listOf<String>(
             "SUNDAY",
             "MONDAY",
             "TUESDAY",
@@ -300,7 +300,7 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
             "FRIDAY",
             "SATURDAY"
         )
-        var dayName = daysList[dayNumber - 1]
+        val dayName = daysList[dayNumber - 1]
         println(dayName)
 
         holiday = dayName == holiDay
