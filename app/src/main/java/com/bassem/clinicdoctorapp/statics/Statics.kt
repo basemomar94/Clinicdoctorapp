@@ -30,7 +30,6 @@ class Statics : Fragment(R.layout.statics_fragment) {
     var _binding: StaticsFragmentBinding? = null
     val binding get() = _binding
     lateinit var db: FirebaseFirestore
-    private lateinit var barChart: AnyChartView
     lateinit var compelteList: ArrayList<Visits>
     var item1: Float? = null
     var item2: Float? = null
@@ -39,8 +38,9 @@ class Statics : Fragment(R.layout.statics_fragment) {
     var item5: Float? = null
     var item6: Float? = null
     var item7: Float? = null
-    var newBooking:Boolean=false
+    var newBooking: Boolean = false
     lateinit var todayGlobal: String
+     var barChart: BarChart?=null
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -67,11 +67,13 @@ class Statics : Fragment(R.layout.statics_fragment) {
             if (selected != -1) {
                 when (view.findViewById<RadioButton>(selected).text.toString()) {
                     "complete visits" -> {
+                        barChart!!.clearChart()
                         println("1")
                         GettingAllVisits("status", "completed")
                     }
                     "new booking" -> {
-                        newBooking=true
+                        barChart!!.clearChart()
+                        newBooking = true
                         GettingAllVisits("status", "Pending")
                         println("New Booking=============")
                     }
@@ -142,8 +144,8 @@ class Statics : Fragment(R.layout.statics_fragment) {
         val day7List: ArrayList<Visits> = arrayListOf()
         Thread(Runnable {
             for (visit: Visits in compelteList) {
-                if (newBooking){
-                    when(visit.booking_date){
+                if (newBooking) {
+                    when (visit.booking_date) {
                         day1 -> {
                             day1List.add(visit)
                         }
@@ -166,32 +168,33 @@ class Statics : Fragment(R.layout.statics_fragment) {
                             day7List.add(visit)
                         }
                     }
-                } else {  when (visit.date) {
-                    day1 -> {
-                        day1List.add(visit)
-                    }
-                    day2 -> {
-                        day2List.add(visit)
-                    }
-                    day3 -> {
-                        day3List.add(visit)
-                    }
-                    day4 -> {
-                        day4List.add(visit)
-                    }
-                    day5 -> {
-                        day5List.add(visit)
-                    }
-                    day6 -> {
-                        day6List.add(visit)
-                    }
-                    day7 -> {
-                        day7List.add(visit)
-                    }
+                } else {
+                    when (visit.date) {
+                        day1 -> {
+                            day1List.add(visit)
+                        }
+                        day2 -> {
+                            day2List.add(visit)
+                        }
+                        day3 -> {
+                            day3List.add(visit)
+                        }
+                        day4 -> {
+                            day4List.add(visit)
+                        }
+                        day5 -> {
+                            day5List.add(visit)
+                        }
+                        day6 -> {
+                            day6List.add(visit)
+                        }
+                        day7 -> {
+                            day7List.add(visit)
+                        }
 
 
-                }}
-
+                    }
+                }
 
 
             }
@@ -212,43 +215,12 @@ class Statics : Fragment(R.layout.statics_fragment) {
                     item2,
                     item1
                 )
-                newBooking=false
+                newBooking = false
+                compelteList.clear()
+
+                println("after size===============${compelteList.size}")
             }
         }).start()
-
-
-    }
-
-    fun setupChart2(
-        item1: Int,
-        item2: Int,
-        item3: Int,
-        item4: Int,
-        item5: Int,
-        item6: Int,
-        item7: Int,
-        day1: String,
-        day2: String,
-        day3: String,
-        day4: String,
-        day5: String,
-        day6: String,
-        day7: String,
-
-        ) {
-
-
-        val bar = AnyChart.bar()
-        val data: MutableList<DataEntry> = arrayListOf()
-        data.add(ValueDataEntry(day1, item1))
-        data.add(ValueDataEntry(day2, item2))
-        data.add(ValueDataEntry(day3, item3))
-        data.add(ValueDataEntry(day4, item4))
-        data.add(ValueDataEntry(day5, item5))
-        data.add(ValueDataEntry(day6, item6))
-        data.add(ValueDataEntry(day7, item7))
-        bar.data(data)
-        barChart.setChart(bar)
 
 
     }
@@ -262,8 +234,7 @@ class Statics : Fragment(R.layout.statics_fragment) {
         value6: Int,
         value7: Int,
     ) {
-
-        var barChart = view?.findViewById<BarChart>(R.id.barchart)
+        barChart=view?.findViewById<BarChart>(R.id.barchart)
         barChart!!.addBar(BarModel(value1.toFloat(), Color.parseColor("#FF0000")))
         barChart!!.addBar(BarModel(value2.toFloat(), Color.parseColor("#00FF00")))
         barChart!!.addBar(BarModel(value3.toFloat(), Color.parseColor("#FFFF00")))
@@ -274,7 +245,7 @@ class Statics : Fragment(R.layout.statics_fragment) {
 
 
 
-        barChart.startAnimation()
+        barChart!!.startAnimation()
 
 
     }

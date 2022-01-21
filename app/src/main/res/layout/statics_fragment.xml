@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context=".statics.Statics">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Note: statics are for the last 7 days"
+        android:textSize="16sp" />
+
     <RadioGroup
         android:id="@+id/filterRadio"
         android:layout_width="wrap_content"
@@ -19,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:checked="true"
             android:text="complete visits" />
 
         <RadioButton
@@ -28,6 +37,7 @@
             android:layout_margin="8dp"
             android:text="new booking" />
     </RadioGroup>
+
 
     <org.eazegraph.lib.charts.BarChart
         android:id="@+id/barchart"
@@ -42,13 +52,7 @@
 
     </org.eazegraph.lib.charts.BarChart>
 
-    <com.anychart.AnyChartView
-        android:id="@+id/anyChart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
 
-    </com.anychart.AnyChartView>
 
 
 </LinearLayout>
