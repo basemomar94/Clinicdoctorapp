@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.R
 import com.bassem.clinicdoctorapp.databinding.CalendarbookingFragmentBinding
 import com.google.firebase.firestore.FieldValue
@@ -156,8 +157,10 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
                 if (it.isSuccessful) {
                     SendBookingNotification()
                     println("Done")
-                    db!!.collection("visits").document(visit!!).update("visit", visit)
-                    activity?.supportFragmentManager?.popBackStack()
+                    db!!.collection("visits").document(visit!!).update("visit", visit).addOnSuccessListener {
+                       findNavController().navigateUp()
+
+                    }
 
                 }
 

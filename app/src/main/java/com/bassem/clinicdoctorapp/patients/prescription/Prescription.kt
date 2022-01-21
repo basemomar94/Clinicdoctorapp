@@ -158,8 +158,7 @@ class Prescription : Fragment(R.layout.prescription_fragment) {
         db = FirebaseFirestore.getInstance()
         db.collection("patiens_info").document(id).update("IsVisit", false).addOnCompleteListener {
             if (it.isSuccessful) {
-                activity?.supportFragmentManager?.popBackStack()
-
+                findNavController().navigateUp()
             }
         }
 

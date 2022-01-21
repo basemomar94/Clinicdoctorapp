@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bassem.clinicdoctorapp.MainActivity
@@ -31,13 +32,10 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
     var db: FirebaseFirestore? = null
     var userid: String? = null
     private lateinit var auth: FirebaseAuth;
-    var imageuri:Uri?=null
-    var imageLink :String?=null
+    var imageuri: Uri? = null
+    var imageLink: String? = null
     private val pickImage = 100
-    var regesited_date:String?=null
-
-
-
+    var regesited_date: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,17 +43,21 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
 
         val actionBar = (activity as MainActivity).supportActionBar
-        actionBar?.title="Add a new patient"
+        actionBar?.title = "Add a new patient"
         GetToday()
-
 
 
     }
 
     override fun onResume() {
         super.onResume()
-         val actionBar = (activity as MainActivity).supportActionBar
-        actionBar?.title="Add a new patient"
+        val actionBar = (activity as MainActivity).supportActionBar
+        actionBar?.title = "Add a new patient"
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
 
     }
 
@@ -75,24 +77,17 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         bottomAppBar?.visibility=View.GONE */
         db = Firebase.firestore
         addnow.setOnClickListener {
-            binding?.addnow?.text = ""
-            binding?.loading?.visibility = View.VISIBLE
-            binding?.addnow?.alpha = .5F
-            binding?.addnow?.isClickable = false
+            LoadingButton()
 
             try {
                 Signup()
             } catch (E: Exception) {
-                println(E.message)
-                binding?.addnow?.text = "ADD"
-                binding?.loading?.visibility = View.INVISIBLE
-                binding?.addnow?.alpha = 1F
-                binding?.addnow?.isClickable = true
+                Toast.makeText(context, "Please fill all the fields", Toast.LENGTH_LONG).show()
+                NormalButton()
 
 
             }
         }
-        binding?.chooseImage?.setOnClickListener { Pick_Image() }
     }
 
     override fun onDestroy() {
@@ -109,17 +104,18 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
         val phone = binding?.phone?.text.toString()
         val mail = binding?.mail?.text.toString()
         val job = binding?.job?.text.toString()
-        var sex : String?=null
-        var id : Int = binding?.sexadd!!.checkedRadioButtonId
-        if (id!=-1){
-            val radio:RadioButton=activity!!.findViewById(id)
-            sex= radio.text.toString()
+        var sex: String? = null
+        var id: Int = binding?.sexadd!!.checkedRadioButtonId
+        if (id != -1) {
+            val radio: RadioButton = activity!!.findViewById(id)
+            sex = radio.text.toString()
         }
-        if (name.isNotEmpty() && complain.isNotEmpty() && complain.isNotEmpty() && note.isNotEmpty()
+        if (name.isNotEmpty() && complain.isNotEmpty()
             && phone.toString().isNotEmpty() && age.toString().isNotEmpty() && mail.isNotEmpty()
 
         ) {
-            val defaultImage="https://firebasestorage.googleapis.com/v0/b/clinicapp-884ba.appspot.com/o/profile%2Fpatient.png?alt=media&token=a3a1c853-a490-40e2-a431-a783bc7b1ad1"
+            val defaultImage =
+                "https://firebasestorage.googleapis.com/v0/b/clinicapp-884ba.appspot.com/o/profile%2Fpatient.png?alt=media&token=a3a1c853-a490-40e2-a431-a783bc7b1ad1"
             val user = hashMapOf(
                 "fullname" to name,
                 "age" to age,
@@ -144,15 +140,16 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
                 findNavController().navigate(R.id.action_newpatients_to_patients)
 
             }!!.addOnFailureListener {
-                binding?.addnow?.text = "ADD"
-                binding?.loading?.visibility = View.INVISIBLE
-                binding?.addnow?.alpha = 1F
-                binding?.addnow?.isClickable = true
-
+                NormalButton()
+                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
 
 
             }
 
+
+        } else {
+            Toast.makeText(context, "Please complete patiens info", Toast.LENGTH_LONG).show()
+            NormalButton()
 
         }
 
@@ -170,52 +167,36 @@ class Newpatients() : Fragment(R.layout.newpatient_fragment) {
 
 
         }.addOnFailureListener {
-            println(it.message)
-            binding?.addnow?.text = "ADD"
-            binding?.loading?.visibility = View.INVISIBLE
-            binding?.addnow?.alpha = 1F
-            binding?.addnow?.isClickable = true
+            Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+            NormalButton()
+            println("Signup Fail")
         }
 
     }
-    fun Pick_Image() {
-        var intent:Intent= Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        startActivityForResult(intent,pickImage)
-
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode==RESULT_OK && requestCode==pickImage ){
-          imageuri=data?.data
-            binding?.selectedImage?.setImageURI(imageuri)
-            UploadtoFirebase(imageuri!!)
-        }
-    }
-    fun UploadtoFirebase (uri:Uri){
-        if (uri!=null){
-            val filename=UUID.randomUUID().toString()+".jpg"
-            val database=FirebaseStorage.getInstance()
-            val storageReference=FirebaseStorage.getInstance().reference.child("newpatient/$filename")
-            storageReference.putFile(uri).addOnSuccessListener {
-                imageLink="newpatient/$filename"
 
 
-
-            }.addOnProgressListener {
-                var progress= 100* it.bytesTransferred/it.totalByteCount
-                binding?.progressBar?.progress= progress.toInt()
-            }
-
-        }
-
-    }
     fun GetToday() {
         val calendar: Calendar = Calendar.getInstance()
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val month = calendar.get(Calendar.MONTH) + 1
         val year = calendar.get(Calendar.YEAR)
         regesited_date = "$day-$month-$year"
+    }
+
+    fun LoadingButton() {
+        binding?.addnow?.text = ""
+        binding?.loading?.visibility = View.VISIBLE
+        binding?.addnow?.alpha = .5F
+        binding?.addnow?.isClickable = false
+
+    }
+
+    fun NormalButton() {
+        binding?.addnow?.text = "ADD"
+        binding?.loading?.visibility = View.INVISIBLE
+        binding?.addnow?.alpha = 1F
+        binding?.addnow?.isClickable = true
+
     }
 
 }
