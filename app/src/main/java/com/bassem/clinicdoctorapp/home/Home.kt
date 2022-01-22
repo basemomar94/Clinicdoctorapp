@@ -39,7 +39,6 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
 
         actionBar?.title = "Home"
         GetToday()
-        GetNewPatient()
         GetSettings()
 
 
@@ -68,6 +67,8 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
 
 
         GetData()
+        GetNewPatient()
+
         GetBookedToday()
         pendingList = arrayListOf()
         WaitingRV(pendingList!!)
@@ -179,10 +180,14 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
                     binding?.currentComplain?.text = pendingList!![0].complain
                     binding?.waitingTV?.text = "Waiting patients (${pendingList!!.size})"
 
+                } else {
+                    binding?.nobooking?.visibility=View.VISIBLE
+
                 }
                 binding?.cancelHome?.text = cancelList.size.toString()
                 binding?.doneHome?.text = completList.size.toString()
                 binding?.todayIncome?.text = "${(fees!! * completList.size).toString()} EGP"
+                visitsArrayList.clear()
             }
         }).start()
     }

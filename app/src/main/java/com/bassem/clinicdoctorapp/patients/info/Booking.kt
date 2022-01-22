@@ -143,12 +143,12 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
     }
 
     fun Addvisit() {
-        println("first test")
-
-        var updates = HashMap<String, Any>()
+        val updates = HashMap<String, Any>()
         updates.put("visit_id", visit!!)
         updates.put("IsVisit", true)
         updates.put("next_visit", date!!)
+        updates["turn"] = turn!!
+
 
         db!!.collection("patiens_info").document(id!!)
             .update(updates)
@@ -250,11 +250,11 @@ class Booking : Fragment(R.layout.calendarbooking_fragment) {
         val locale = Locale.US
         val sdf = DateTimeFormatter.ofPattern("d-M-yyyy", locale)
         val visitDate = LocalDate.parse(date, sdf)
-        if (visitDate == dateNow) {
-            result = "Your visit will be today"
+        result = if (visitDate == dateNow) {
+            "Your visit will be today"
         } else {
             var differnt = ChronoUnit.DAYS.between(dateNow, visitDate)
-            result = "Your visit will be after $differnt days"
+            "Your visit will be after $differnt days"
         }
         return result
 

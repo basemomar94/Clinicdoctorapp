@@ -246,7 +246,10 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
 
     fun SetProfileImage(link: String) {
         val imagePath = binding?.profileimage
-        Glide.with(this).load(link).into(imagePath!!)
+        if (activity!=null){
+            Glide.with(this).load(link).into(imagePath!!)
+
+        }
     }
 
 
