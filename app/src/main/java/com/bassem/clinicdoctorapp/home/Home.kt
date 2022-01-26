@@ -181,7 +181,7 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
                     binding?.waitingTV?.text = "Waiting patients (${pendingList!!.size})"
 
                 } else {
-                    binding?.nobooking?.visibility=View.VISIBLE
+                    binding?.nobooking?.visibility = View.VISIBLE
 
                 }
                 binding?.cancelHome?.text = cancelList.size.toString()
@@ -194,9 +194,15 @@ class Home() : Fragment(R.layout.home_fragment), VisitsAdapter.Myclicklisener {
 
     fun GetBookedToday() {
         db = FirebaseFirestore.getInstance()
-        db!!.collection("visits").whereEqualTo("booking_date", today).whereEqualTo("status","Pending").get().addOnCompleteListener {
+        db!!.collection("visits").whereEqualTo("booking_date", today)
+            .whereEqualTo("status", "Pending").get().addOnCompleteListener {
             if (it.isSuccessful) {
                 binding?.bookedToday?.text = it.result?.size().toString()
+                binding?.shimmer?.apply {
+                    visibility=View.GONE
+                    stopShimmer()
+                }
+                binding?.cards?.visibility=View.VISIBLE
 
             }
 

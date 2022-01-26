@@ -12,190 +12,232 @@
         android:layout_height="wrap_content"
         android:fadeScrollbars="true"
         android:scrollbars="none">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/completeCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:visibility="visible"
-                app:cardBackgroundColor="@color/olive"
-                app:cardCornerRadius="10dp">
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
 
-                <LinearLayout
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/shimmercard" />
+
+                        <include layout="@layout/shimmercard" />
+
+                        <include layout="@layout/shimmercard" />
+
+                        <include layout="@layout/shimmercard" />
+
+                        <include layout="@layout/shimmercard" />
+
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cards"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/completeCard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_margin="8dp"
+                    android:visibility="visible"
+                    app:cardBackgroundColor="@color/olive"
+                    app:cardCornerRadius="10dp">
 
-                    <TextView
-                        android:id="@+id/texatView2"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="Compelte visit"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/done_home"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text=".."
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/texatView2"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Compelte visit"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/bookedCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/darkgreen"
-                app:cardCornerRadius="10dp">
+                        <TextView
+                            android:id="@+id/done_home"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                <LinearLayout
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/bookedCard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@color/darkgreen"
+                    app:cardCornerRadius="10dp">
 
-                    <TextView
-                        android:id="@+id/textsView2"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="Booked Today"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/booked_today"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text=".."
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/textsView2"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Booked Today"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cancelCard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="@android:color/holo_red_dark"
-                app:cardCornerRadius="10dp">
+                        <TextView
+                            android:id="@+id/booked_today"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text=".."
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                <LinearLayout
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cancelCard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@android:color/holo_red_dark"
+                    app:cardCornerRadius="10dp">
 
-                    <TextView
-                        android:id="@+id/textaView2"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="Canceled Today"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/cancel_home"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text=".."
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/textaView2"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Canceled Today"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/lightgreen"
-                app:cardCornerRadius="10dp">
+                        <TextView
+                            android:id="@+id/cancel_home"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text=".."
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                <LinearLayout
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_margin="8dp"
+                    app:cardBackgroundColor="@color/lightgreen"
+                    app:cardCornerRadius="10dp">
 
-                    <TextView
-                        android:id="@+id/textVsiew2"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="Income Today"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/today_income"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text=".."
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/textVsiew2"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Income Today"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="10dp">
+                        <TextView
+                            android:id="@+id/today_income"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text=".."
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
-                <LinearLayout
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_margin="8dp"
+                    app:cardCornerRadius="10dp">
 
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="New patients"
-                        android:textAlignment="center"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/new_patients"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text=".."
-                        android:textAlignment="center"
-                        android:textColor="@color/darkgreen"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="New patients"
+                            android:textAlignment="center"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/new_patients"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text=".."
+                            android:textAlignment="center"
+                            android:textColor="@color/darkgreen"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
+
         </LinearLayout>
+
+
+
     </HorizontalScrollView>
 
     <LinearLayout
@@ -351,7 +393,9 @@
         <ImageView
             android:id="@+id/nobooking"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="98dp"
             android:scaleType="fitCenter"
             android:src="@drawable/nobook"
             android:visibility="gone" />

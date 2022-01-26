@@ -248,6 +248,12 @@ class PatientsInfo() : Fragment(R.layout.patientinfo_fragment) {
         val imagePath = binding?.profileimage
         if (activity!=null){
             Glide.with(this).load(link).into(imagePath!!)
+            imagePath.visibility=View.VISIBLE
+            binding?.shimmer?.apply {
+                visibility=View.GONE
+                stopShimmer()
+            }
+
 
         }
     }
