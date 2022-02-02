@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,6 +22,11 @@ class LoginActivity : AppCompatActivity() {
     lateinit var loginBu: Button
     lateinit var loading: ProgressBar
 
+    override fun onStart() {
+        super.onStart()
+        checkLogin()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -28,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
         password = findViewById(R.id.password_log)
         loginBu = findViewById(R.id.confirmBu)
         loading = findViewById(R.id.progressLogin)
-        checkLogin()
         loginBu.setOnClickListener {
             if (mail.text.isNotEmpty() && password.text.isNotEmpty()) {
                 checkDoctor()
@@ -77,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
     fun goToDashboard() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     fun showLoading() {
