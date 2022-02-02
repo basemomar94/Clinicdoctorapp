@@ -94,4 +94,14 @@
         android:name="com.bassem.clinicdoctorapp.statics.Statics"
         android:label="statics_fragment"
         tools:layout="@layout/statics_fragment" />
+    <fragment
+        android:id="@+id/historyOfvisits"
+        android:name="com.bassem.clinicdoctorapp.schedule.history.HistoryOfvisits"
+        android:label="history_visits_fragment"
+        tools:layout="@layout/history_visits_fragment" />
+    <fragment
+        android:id="@+id/today_Visitor"
+        android:name="com.bassem.clinicdoctorapp.schedule.history.today_visitors.Today_Visitor"
+        android:label="todayvisitors_fragment"
+        tools:layout="@layout/todayvisitors_fragment" />
 </navigation>
