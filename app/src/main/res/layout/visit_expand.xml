@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     android:orientation="vertical"
-    tools:context=".Expand_visit">
+    tools:context=".schedule.Expand_visit">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

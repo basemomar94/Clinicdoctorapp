@@ -1,10 +1,11 @@
-package com.bassem.clinicdoctorapp
+package com.bassem.clinicdoctorapp.schedule
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bassem.clinicdoctorapp.R
 
 import com.bassem.clinicdoctorapp.databinding.VisitExpandBinding
 import com.google.firebase.firestore.FirebaseFirestore

@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bassem.clinicdoctorapp">
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    package="com.bassem.clinicdoctorapp" >
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
+    <queries>
+        <package android:name="com.whatsapp" />
+        <package android:name="com.whatsapp.w4b" />
+    </queries>
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
-        android:theme="@style/Theme.Clinicdoctorapp">
+        android:theme="@style/Theme.Clinicdoctorapp"
+        android:usesCleartextTraffic="true" >
         <activity
             android:name=".MainActivity"
+
+            android:exported="false" />
+        <activity
+            android:name="com.bassem.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-
-            >
-
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
-    <queries>
-        <package android:name="com.whatsapp" />
-        <package android:name="com.whatsapp.w4b" />
-    </queries>
 
 </manifest>
