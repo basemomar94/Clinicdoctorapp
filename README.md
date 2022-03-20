@@ -17,3 +17,12 @@ this app has many features to enable the doctor or clinic manager to manage his 
 2) Navigation component.
 3) ViewPager2.
 4) Glide.
+5) Fragments.
+6) Whatsapp api.
+
+
+https://user-images.githubusercontent.com/63014132/159177737-eeec32a6-a116-4f33-9786-3bdd70d3b120.mp4
+
+<a href="url"><img src="https://iconape.com/wp-content/files/fa/64777/svg/google-play-store.svg" align="left" height="48" width="48" ></a>
+https://play.google.com/store/apps/details?id=com.bassem.clinicadminapp
+
