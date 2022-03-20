@@ -19,6 +19,7 @@ this app has many features to enable the doctor or clinic manager to manage his 
 4) Glide.
 5) Fragments.
 6) Whatsapp api.
+7) FCM.
 
 
 https://user-images.githubusercontent.com/63014132/159177737-eeec32a6-a116-4f33-9786-3bdd70d3b120.mp4
