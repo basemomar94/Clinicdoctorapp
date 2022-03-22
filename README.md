@@ -1,7 +1,10 @@
 # Clinicdoctorapp
+
+this app has many features to enable the doctor or clinic manager to manage his facility, 
+
 ![clinic doctor](https://user-images.githubusercontent.com/63014132/159172922-f1336f7b-9c17-42e6-9258-49403ae6eace.jpg)
 
-this app has many features to enable the doctor or clinic manager to manage his facility, he can 
+# Doctor can
 1) Add a new patient with personal and medical information.
 2) Book or cancel appointments.
 3) Check history of previous appointments.
